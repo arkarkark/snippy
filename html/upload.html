@@ -1,0 +1,16 @@
+Upload a .ini file of short url pairs to fill up the database.
+<br />
+<form method="post" enctype="multipart/form-data" action="/admin/upload">
+<input type="file" name="myfile" />
+<input type="submit" />
+</form>
+
+<br />
+The file looks like this...
+
+<pre>
+[urls]
+g="http://www.google.com/search?q=%s"
+gis="http://images.google.com/images?q=%s"
+f="http://froogle.google.com/froogle?q=%s&btnG=Search+Froogle&scoring=r"
+</pre>

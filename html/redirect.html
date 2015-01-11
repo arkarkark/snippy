@@ -1,0 +1,16 @@
+<html><head><script type="text/javascript">
+var url = "{{url|addslashes}}";
+if (url.indexOf('://') > 3) {
+  if (window.location.replace) {
+    window.location.replace(url);
+  } else {
+    window.location.href = url;
+  }
+} else {
+  alert(url + ' Doesn\'t look like a URL!');
+}
+</script>
+{# <!-- META HTTP-EQUIV="Refresh" CONTENT="10;URL={{url}}" -- > #}
+</head><body>
+I shall redirect you to:<br/> {{url}}
+</body></html>
