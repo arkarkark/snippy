@@ -14,6 +14,13 @@ __pychecker__ = 'no-override'
 
 class SnippyHandler(wtwfhandler.WtwfHandler):
 
+  def is_iPhone(self):
+    ua = self.request.headers['User-Agent']
+    for part in 'iPhone,AppleWebKit,Mobile/,Safari/,'.split(','):
+      if part not in ua:
+        return False
+    return True
+
   def get(self, lookup, _):
     # Strip off the leading /
     path_info = lookup
@@ -30,6 +37,9 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
     else:
       if '%20' in path_info:
         path_info = urllib.unquote(path_info)
+      elif '+' in path_info and self.is_iPhone():
+        # friggin mobile safari and default search engines
+        path_info = path_info.replace('+', ' ')
 
       # see if we have a space and then something
       parts = path_info.split(' ', 1)
