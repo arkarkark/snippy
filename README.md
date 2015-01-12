@@ -8,6 +8,18 @@ it also has some other features:
 * short urls protected by a login
 * image proxy
 
+# Install
+
+```bash
+bundle install
+npm install
+bower install
+make dev
+# then make install
+```
+
+# More
+
 Blog posts about it are here:
 
 * [first version in php](http://blog.wtwf.com/2006/08/snippy-urls.php)

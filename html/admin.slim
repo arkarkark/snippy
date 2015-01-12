@@ -1,0 +1,42 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    title Snippy Admin
+
+    link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+    link href="/static/snippy.css" rel="stylesheet"
+
+    link title="snippy" rel="search" type="application/opensearchdescription+xml" href="/admin/suggestxml"
+
+    script src="/bower_components/jquery/dist/jquery.min.js"
+    script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"
+    script src="/bower_components/angular/angular.min.js"
+    script src="/bower_components/ui-router/release/angular-ui-router.min.js"
+
+  body
+    .container
+      .header
+        h1 Snippy Admin
+      .row
+        .col-lg-12
+          ul
+            li
+              a href="/admin/add/" Add a snippy url
+            li
+              a href="/admin/search" Search
+            li
+              a href="/admin/addadmin" Add an Admin
+            li
+              a href="/admin/upload" Upload a ini file of links
+            li
+              a href="javascript:window.external.AddSearchProvider('/admin/suggestxml');"
+                | Add Snippy Search to your browser
+              | (xml
+              a< href="/admin/suggestxml" here
+              | )
+
+          form method="get" action="/"
+            input type="search" name="url"
