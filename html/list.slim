@@ -1,0 +1,22 @@
+ul
+  li
+    a href="/admin/add/" Add a snippy url
+  li
+    a href="/admin/search" Search
+  li
+    a href="/admin/addadmin" Add an Admin
+  li
+    a href="/admin/upload" Upload a ini file of links
+  li
+    a href="javascript:window.external.AddSearchProvider('/admin/suggestxml');"
+      | Add Snippy Search to your browser
+    | (xml
+    a< href="/admin/suggestxml" here
+    | )
+
+form method="get" action="/"
+  input type="search" name="url"
+
+
+button onClick="foo()"
+  | Hello

@@ -1,0 +1,53 @@
+form.form-horizontal.explore-save-form [
+  name="saveLookForm"
+  ng-submit="saveQuery(saveLookForm)"
+  lk-enter="saveQuery(saveLookForm)"
+  ng-disabled="saveController.look.saveDisabled()"
+]
+  .form-group
+    label.col-sm-2.control-label for="keyword" Keyword
+    .col-sm-4
+      input.form-control#keyword
+
+  .form-group
+    label.col-sm-2.control-label for="url" Url
+    .col-sm-10
+      input.form-control#url
+
+  .form-group
+    label.col-sm-2.control-label for="alt" Alt Url
+    .col-sm-10
+      input.form-control#alt
+
+  .form-group
+    label.col-sm-2.control-label for="mobile" Mobile Url
+    .col-sm-10
+      input.form-control#mobile
+
+  .form-group
+    label.col-sm-2.control-label for="suggest" Suggest Url
+    .col-sm-10
+      input.form-control#suggest
+
+  .form-group
+    label.col-sm-2.control-label for="private" Private
+    .col-sm-10
+      input.form-checkbox#private type="checkbox"
+
+  .form-group
+    label.col-sm-2.control-label for="promoted" Promoted
+    .col-sm-10
+      input.form-checkbox#promoted type="checkbox"
+
+  .form-group
+    .col-sm-8
+    .col-sm-2
+      button.btn.btn-primary [
+        type="submit"
+      ]
+        | Create
+
+    .col-sm-2
+      button.btn [
+      ]
+        | Delete
