@@ -10,7 +10,7 @@ app = angular.module('Snippy', [
   $stateProvider.state('home',
     url: '/admin/'
     templateUrl: '/static/html/list.html'
-  ).state('add',
+  ).state('Add',
     url: '/admin/add/'
     templateUrl: '/static/html/add.html'
   )

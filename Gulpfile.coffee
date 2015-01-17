@@ -3,6 +3,7 @@ coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
 gcson = require 'gulp-cson'
 gulp = require 'gulp'
+ngAnnotate = require 'gulp-ng-annotate'
 slim = require 'gulp-slim'
 sourcemaps = require 'gulp-sourcemaps'
 
@@ -27,6 +28,7 @@ gulp.task 'coffee', ->
   gulp.src(('js/**/*.coffee'))
     .pipe(sourcemaps.init())
     .pipe(coffee().on('error', swallowError))
+    .pipe(ngAnnotate())
     .pipe(concat('app.js').on('error', swallowError))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('static/js'))
