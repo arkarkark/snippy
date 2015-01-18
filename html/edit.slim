@@ -1,8 +1,8 @@
 form.form-horizontal.explore-save-form [
-  name="saveLookForm"
-  ng-submit="saveQuery(saveLookForm)"
-  lk-enter="saveQuery(saveLookForm)"
-  ng-disabled="saveController.look.saveDisabled()"
+  name="editForm"
+  ng-submit="editController.save(editForm)"
+  lk-enter="editController.save(editForm)"
+  ng-disabled="editController.saveDisabled()"
 ]
   .form-group
     label.col-sm-2.control-label for="keyword" Keyword
@@ -52,12 +52,12 @@ form.form-horizontal.explore-save-form [
     .col-sm-2
       button.btn.btn-primary [
         type="submit"
-        ng-click="editController.save()"
         ng-bind="!editController.snip.id ? 'Create' : 'Save'"
       ]
 
     .col-sm-2
       button.btn [
-        ng-click="editController.moveIt()"
+        type="button"
+        ng-click="editController.delete(editForm)"
       ]
         | Delete
