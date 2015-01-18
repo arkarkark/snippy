@@ -10,17 +10,17 @@ from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
+from lib.crud import crud_model
+
 # used to prefix memcache keys to remember we missed something.
 MISSING = 'Missing:'
 
-
-class Snippy(ndb.Model):
+class Snippy(crud_model.CrudNdbModel):
   keyword = ndb.StringProperty(required=True)
   url = ndb.TextProperty(required=True)
   alt_url = ndb.TextProperty()  # used when url has %s and no second param given
   mobile_url = ndb.TextProperty()  # used when requested form a mobile device
   suggest_url = ndb.TextProperty()  # used for suggest as you type
-  owner = ndb.UserProperty(required=True)
   private = ndb.BooleanProperty()
   used_count = ndb.IntegerProperty()
   # TODO(ark): redirect_normally = ndb.BooleanProperty()

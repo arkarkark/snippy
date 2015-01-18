@@ -7,47 +7,57 @@ form.form-horizontal.explore-save-form [
   .form-group
     label.col-sm-2.control-label for="keyword" Keyword
     .col-sm-4
-      input.form-control#keyword
+      input.form-control#keyword [
+        ng-model="editController.snip.keyword"
+        ng-change="editController.keywordChanged()"
+      ]
 
   .form-group
     label.col-sm-2.control-label for="url" Url
     .col-sm-10
-      input.form-control#url
+      input.form-control#url ng-model="editController.snip.url"
 
   .form-group
     label.col-sm-2.control-label for="alt" Alt Url
     .col-sm-10
-      input.form-control#alt
+      input.form-control#alt ng-model="editController.snip.alt_url"
 
   .form-group
     label.col-sm-2.control-label for="mobile" Mobile Url
     .col-sm-10
-      input.form-control#mobile
+      input.form-control#mobile ng-model="editController.snip.mobile_url"
 
   .form-group
     label.col-sm-2.control-label for="suggest" Suggest Url
     .col-sm-10
-      input.form-control#suggest
+      input.form-control#suggest ng-model="editController.snip.suggest_url"
 
   .form-group
     label.col-sm-2.control-label for="private" Private
     .col-sm-10
-      input.form-checkbox#private type="checkbox"
+      input.form-checkbox#private type="checkbox" ng-model="editController.snip.private"
+
+  .form-group
+    label.col-sm-2.control-label for="proxy" Proxy
+    .col-sm-10
+      input.form-checkbox#proxy type="checkbox" ng-model="editController.snip.proxy"
 
   .form-group
     label.col-sm-2.control-label for="promoted" Promoted
     .col-sm-10
-      input.form-checkbox#promoted type="checkbox"
+      input.form-checkbox#promoted type="checkbox" ng-model="editController.snip.promoted"
 
   .form-group
     .col-sm-8
     .col-sm-2
       button.btn.btn-primary [
         type="submit"
+        ng-click="editController.save()"
+        ng-bind="!editController.snip.id ? 'Create' : 'Save'"
       ]
-        | Create
 
     .col-sm-2
       button.btn [
+        ng-click="editController.moveIt()"
       ]
         | Delete

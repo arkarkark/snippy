@@ -11,6 +11,7 @@ bowerJavaScript = [
   'jquery/dist/jquery.js'
   'bootstrap/dist/js/bootstrap.js'
   'angular/angular.js'
+  'angular-resource/angular-resource.js'
   'ui-router/release/angular-ui-router.js'
 ]
 
