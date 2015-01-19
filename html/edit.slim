@@ -34,8 +34,16 @@ form.form-horizontal.explore-save-form [
 
   .form-group
     label.col-sm-2.control-label for="private" Private
-    .col-sm-10
+    .col-sm-2
       input.form-checkbox#private type="checkbox" ng-model="editController.snip.private"
+    .col-sm-8
+      qrcode.qr [
+        ng-show="editController.snip.keyword"
+        size="110"
+        version="{{editController.qrSettings().version}}"
+        error-correction-level="{{editController.qrSettings().level}}"
+        data="{{ editController.getUrl() }}"
+      ]
 
   .form-group
     label.col-sm-2.control-label for="proxy" Proxy

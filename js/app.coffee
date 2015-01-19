@@ -5,6 +5,7 @@ app = angular.module('Snippy', [
   'SnippyEdit'
   'ui.router'
   'ngResource'
+  'monospaced.qrcode'
 ]).config(($locationProvider, $stateProvider, $urlRouterProvider) ->
   $locationProvider.html5Mode(true)
   $urlRouterProvider.otherwise('/admin/')

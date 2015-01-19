@@ -81,3 +81,10 @@ body {
 input[type=checkbox].form-checkbox {
   margin-top: 11px;
 }
+
+.qr {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  z-index: 30;
+}

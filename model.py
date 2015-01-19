@@ -28,6 +28,13 @@ class Snippy(crud_model.CrudNdbModel):
   def _pre_put_hook(self):
     memcache.delete(MISSING + self.keyword)
 
+  @staticmethod
+  def Search(query, request):
+    keyword_search = request.get('keyword')
+    if keyword_search:
+      query = query.filter(Snippy.keyword == keyword_search)
+    return query
+
 
 def GetByKeyword(kw):
   # see if this is in the not found memcache

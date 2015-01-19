@@ -8,11 +8,14 @@ slim = require 'gulp-slim'
 sourcemaps = require 'gulp-sourcemaps'
 
 bowerJavaScript = [
+  'underscore/underscore.js'
   'jquery/dist/jquery.js'
   'bootstrap/dist/js/bootstrap.js'
   'angular/angular.js'
   'angular-resource/angular-resource.js'
   'ui-router/release/angular-ui-router.js'
+  'qrcode-generator/js/qrcode.js'
+  'angular-qrcode/qrcode.js'
 ]
 
 swallowError = (err) ->
