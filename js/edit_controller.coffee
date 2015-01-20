@@ -24,14 +24,14 @@ angular.module('SnippyEdit', []).controller('EditController', (
     length = @getUrl().length
     _.find(qrLookup, (q) -> q.binary  > length)
 
-  @originalId = $location.search().id
-  Snip.query({keyword: @originalId}, (snips) =>
+  @originalKeyword = $location.search().keyword || ''
+  Snip.query({keyword: @originalKeyword}, (snips) =>
     @snip = snips?[0] || {}
     @original = angular.copy(@snip)
   )
 
   @keywordChanged = =>
-    $location.search('id', @snip.keyword)
+    $location.search('keyword', @snip.keyword)
 
   @save = (form) =>
     console.log('save', form)

@@ -18,7 +18,10 @@ html lang="en" ng-app="Snippy"
   body
     .container
       .header
-        h1 ng-bind="'Snippy Admin' + ($state.current.name != 'home' ? ': ' + $state.current.name : '')"
+        h1
+          a href="/admin/"
+            | Snippy Admin
+          | {{ $state.current.name != 'home' ? ': ' + $state.current.name : '' }}
       .row
         .col-lg-12
           div [ui-view]

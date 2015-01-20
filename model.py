@@ -30,11 +30,25 @@ class Snippy(crud_model.CrudNdbModel):
 
   @staticmethod
   def Search(query, request):
-    keyword_search = request.get('keyword')
-    if keyword_search:
-      query = query.filter(Snippy.keyword == keyword_search)
-    return query
+    arguments = request.arguments()
 
+    if 'keyword' in arguments:
+      query = query.filter(Snippy.keyword == request.get('keyword'))
+    else:
+      if 'search' in arguments:
+        search_param = request.get('search')
+
+        # TODO(ark) make this do full text search https://cloud.google.com/appengine/docs/python/search/
+        results = []
+        # TODO(ark) make this fetch more than 1000 results...
+        for snip in query.fetch(1000):
+          if search_param in snip.keyword or search_param in snip.url:
+            if snip.keyword == search_param:
+              results.insert(0, snip)
+            else:
+              results.append(snip)
+        return results
+    return query
 
 def GetByKeyword(kw):
   # see if this is in the not found memcache

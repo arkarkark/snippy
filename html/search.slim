@@ -1,0 +1,72 @@
+form.form-horizontal.explore-save-form [
+  name="searchForm"
+  ng-submit="searchController.search(searchForm)"
+  lk-enter="searchController.search(searchForm)"
+]
+  .form-group
+    label.col-sm-2.control-label for="keyword" Keyword
+    .col-sm-4
+      input.form-control#keyword [
+        type="search"
+        ng-model="searchController.searchText"
+        ng-change="searchController.searchChanged()"
+      ]
+
+hr
+
+form.form-horizontal.explore-save-form [
+  ng-show="searchController.snips.length"
+  name="resultsForm"
+]
+  .row
+    table.col-sm-12.search-results border="1"
+      tr
+        th
+        th Keyword
+        th Url
+        th
+        th Use Count
+        th
+      tr ng-repeat="snip in searchController.snips"
+        th
+          input type="checkbox" ng-model="searchController.snipSelected[$index]"
+        th ng-bind="snip.keyword"
+        th ng-bind="snip.url"
+        th
+          / alt/mobile/suggest present?
+        th ng-bind="snip.used_count"
+        th
+          a href="/admin/edit/?keyword={{ snip.keyword }}" Edit
+
+
+  .form-group
+    .col-sm-3
+      label
+        input> [
+          type="checkbox"
+          ng-model="searchController.private"
+        ]
+        | Private
+    .col-sm-3
+      label
+        input> [
+          type="checkbox"
+          ng-model="searchController.proxy"
+        ]
+        | Proxy
+    .col-sm-3
+      label
+        input> [
+          type="checkbox"
+          ng-model="searchController.promoted"
+        ]
+        | Promoted
+    .col-sm-3
+      button.btn.btn-primary [
+        type="button"
+        ng-click="searchController.update(resultsForm)"
+      ] Update
+      button.btn [
+        type="button"
+        ng-click="searchController.delete(resultsForm)"
+      ] Delete

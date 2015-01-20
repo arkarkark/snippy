@@ -1,22 +1,15 @@
 ul
   li
-    a href="/admin/edit/" Add a snippy url
+    a href="/admin/edit/" Add a snip
   li
-    a href="/admin/search" Search
+    a href="/admin/search/" Search
   li
-    a href="/admin/addadmin" Add an Admin
+    a target="_self" href="/admin/export" Export all snips as JSON
   li
-    a href="/admin/upload" Upload a ini file of links
+    a href="/admin/import/" Import a JSON file of snips
   li
-    a href="javascript:window.external.AddSearchProvider('/admin/suggestxml');"
+    a> href="javascript:window.external.AddSearchProvider('/admin/suggestxml');"
       | Add Snippy Search to your browser
     | (xml
-    a< href="/admin/suggestxml" here
+    a< target="_self" href="/admin/suggestxml" here
     | )
-
-form method="get" action="/"
-  input type="search" name="url"
-
-
-button onClick="foo()"
-  | Hello
