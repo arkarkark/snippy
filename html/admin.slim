@@ -21,7 +21,7 @@ html lang="en" ng-app="Snippy"
         h1
           a href="/admin/"
             | Snippy Admin
-          | {{ $state.current.name != 'home' ? ': ' + $state.current.name : '' }}
+          | {{$state.current.name != 'home' ? ': ' + $state.current.name : ''}}
       .row
         .col-lg-12
           div [ui-view]

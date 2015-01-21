@@ -1,11 +1,11 @@
 # Copyright 2013 Google Inc. All Rights Reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,7 +75,6 @@ you must pass them in to the GetCrudHandler method.
 
 You can also just inherit from CrudHandler with your own Handler if you wish.
 """
-
 
 
 import collections
@@ -232,6 +231,8 @@ class CrudHandler(webapp2.RequestHandler):
 
   def get(self):
     """Return json for a specific or new entity. or search results."""
+    del self.response.headers['Content-Type']
+
     user = users.get_current_user()
 
     # This could be a query (search) or a req. for a specific (or new) entity.
@@ -260,9 +261,9 @@ class CrudHandler(webapp2.RequestHandler):
         all_models = all_models.filter('active >', False)
       if self.search_function:
         # pylint: disable=not-callable
-        all_models = self.search_function(all_models, self.request)
+        all_models = self.search_function(all_models, self.request, self.response)
       if hasattr(self.model, 'Search'):
-        all_models = self.model.Search(all_models, self.request)
+        all_models = self.model.Search(all_models, self.request, self.response)
       # Now it's possible that all_models is now just a single model
       if isinstance(all_models, db.Model) or isinstance(all_models, ndb.Model):
         if not self.IsAuthorized(crud_model.Actions.QUERY, user, all_models):
@@ -287,7 +288,8 @@ class CrudHandler(webapp2.RequestHandler):
       ans = self._GetJsonDict(ex)
       if key_id == crud_model.NEW_ENTITY_ID:
         ans['id'] = crud_model.NEW_ENTITY_ID
-    self.response.headers['Content-Type'] = 'text/json'
+    if 'Content-Type' not in self.response.headers:
+      self.response.headers['Content-Type'] = 'text/json'
     self.response.out.write(JSON_PREFIX + json.dumps(ans, default=JsonPrinter))
 
   def post(self):

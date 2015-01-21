@@ -9,6 +9,7 @@ import random
 from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.ext import ndb
+from google.appengine.runtime import DeadlineExceededError
 
 from lib.crud import crud_model
 
@@ -29,8 +30,11 @@ class Snippy(crud_model.CrudNdbModel):
     memcache.delete(MISSING + self.keyword)
 
   @staticmethod
-  def Search(query, request):
+  def Search(query, request, response):
     arguments = request.arguments()
+
+    if 'download' in arguments:
+      response.headers['Content-Type'] = 'application/octet-stream'
 
     if 'keyword' in arguments:
       query = query.filter(Snippy.keyword == request.get('keyword'))
@@ -40,13 +44,16 @@ class Snippy(crud_model.CrudNdbModel):
 
         # TODO(ark) make this do full text search https://cloud.google.com/appengine/docs/python/search/
         results = []
-        # TODO(ark) make this fetch more than 1000 results...
-        for snip in query.fetch(1000):
-          if search_param in snip.keyword or search_param in snip.url:
-            if snip.keyword == search_param:
-              results.insert(0, snip)
-            else:
-              results.append(snip)
+        try:
+          for snip in query.iter():
+            if search_param in snip.keyword or search_param in snip.url:
+              if snip.keyword == search_param:
+                results.insert(0, snip)
+              else:
+                results.append(snip)
+        except DeadlineExceededError:
+          logging.error('Ran out of time looking for: %r', search_param)
+          pass
         return results
     return query
 

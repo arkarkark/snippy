@@ -97,3 +97,11 @@ table.search-results {
   }
 */
 }
+
+table.search-results tr:first-child {
+  background-color: #f5f5ff;
+}
+
+.right {
+  float: right;
+}

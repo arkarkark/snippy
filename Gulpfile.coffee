@@ -55,7 +55,6 @@ gulp.task 'build', ['coffee', 'slim', 'cson', 'bower:js']
 gulp.task 'watch', ['build'], ->
   gulp.watch 'js/**/*.coffee', ['coffee']
   gulp.watch 'html/**/*.slim', ['slim']
-  gulp.watch '*.cson', ['cson']
-  gulp.watch 'bower_components/**/*.js', ['bower:js']
+  gulp.watch './*.cson', ['cson']
 
 gulp.task 'default', ['watch']

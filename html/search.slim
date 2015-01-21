@@ -19,54 +19,65 @@ form.form-horizontal.explore-save-form [
   name="resultsForm"
 ]
   .row
-    table.col-sm-12.search-results border="1"
+    table.col-sm-12.search-results
       tr
         th
+          input type="checkbox" ng-model="searchController.allSelected"
         th Keyword
         th Url
         th
         th Use Count
         th
       tr ng-repeat="snip in searchController.snips"
-        th
+        td
           input type="checkbox" ng-model="searchController.snipSelected[$index]"
-        th ng-bind="snip.keyword"
-        th ng-bind="snip.url"
-        th
+        td ng-bind="snip.keyword"
+        td ng-bind="snip.url"
+        td
           / alt/mobile/suggest present?
-        th ng-bind="snip.used_count"
-        th
-          a href="/admin/edit/?keyword={{ snip.keyword }}" Edit
+        td ng-bind="snip.used_count"
+        td
+          a href="/admin/edit/?keyword={{snip.keyword}}" Edit
 
+hr
 
   .form-group
-    .col-sm-3
+    .col-sm-2
       label
         input> [
           type="checkbox"
           ng-model="searchController.private"
         ]
         | Private
-    .col-sm-3
+    .col-sm-2
       label
         input> [
           type="checkbox"
           ng-model="searchController.proxy"
         ]
         | Proxy
-    .col-sm-3
+    .col-sm-2
       label
         input> [
           type="checkbox"
           ng-model="searchController.promoted"
         ]
         | Promoted
-    .col-sm-3
-      button.btn.btn-primary [
-        type="button"
-        ng-click="searchController.update(resultsForm)"
-      ] Update
-      button.btn [
-        type="button"
-        ng-click="searchController.delete(resultsForm)"
-      ] Delete
+    .col-sm-1
+    .col-sm-5
+      span.right
+        button.btn.btn-primary> [
+          type="button"
+          ng-disabled="searchController.buttonsEnabled()"
+          ng-click="searchController.update(resultsForm)"
+        ] Update
+        button.btn> [
+          type="button"
+          ng-disabled="searchController.buttonsEnabled()"
+          ng-click="searchController.delete(resultsForm)"
+        ] Delete
+        button.btn> [
+          type="button"
+          ng-disabled="searchController.buttonsEnabled()"
+          ng-click="searchController.export(resultsForm)"
+        ] Export
