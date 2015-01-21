@@ -6,3 +6,6 @@ static/html
 static/js
 vendor
 dateutil
+app/static/css/vendor.css
+app/static/html
+app/static/js
