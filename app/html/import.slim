@@ -1,4 +1,12 @@
 
-form method="post" enctype="multipart/form-data" action="/admin/upload"
-  input type="file" name="myfile"
-  input type="submit"
+form method="post" enctype="multipart/form-data" action="/admin/api/upload"
+
+  .form-group
+    label.col-sm-2.control-label for="keyword" Import File
+    .col-sm-4
+      input type="file" name="myfile"
+  .form-group
+    .col-sm-8
+    .col-sm-2
+      button.btn.btn-primary type="submit"
+        | Submit

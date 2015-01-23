@@ -5,6 +5,7 @@ angular.module('SnippySearch', [])
 app = angular.module('Snippy', [
   'SnippyEdit'
   'SnippySearch'
+  'QrCode'
   'ui.router'
   'ngResource'
   'monospaced.qrcode'

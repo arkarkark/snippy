@@ -24,7 +24,7 @@ class AHandler(webapp.RequestHandler):
 app = webapp.WSGIApplication([
   ('/admin/api/junk.*', AHandler),
   ('/admin/api/snip.*', crud_handler.GetCrudHandler(model.Snippy)),
-  ('/admin/upload', upload.UploadHandler),
+  ('/admin/api/upload', upload.UploadHandler),
   ('/admin/add/(.*)', add.AddHandler),
   ('/admin/search.*', search.SearchHandler),
   ('/admin/suggestxml', suggest.SuggestXmlHandler),
