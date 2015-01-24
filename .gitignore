@@ -9,3 +9,6 @@ dateutil
 app/static/css/vendor.css
 app/static/html
 app/static/js
+app/static/css
+.sass-cache
+app/static/fonts

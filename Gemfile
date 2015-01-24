@@ -8,4 +8,5 @@ source "https://rubygems.org"
 
 group :development, :test do
   gem 'slim',             '2.0.1'
+  gem 'font-awesome-sass', '4.2.2'
 end

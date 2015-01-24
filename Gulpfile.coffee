@@ -1,11 +1,14 @@
+autoprefixer = require 'gulp-autoprefixer'
 cached = require 'gulp-cached'
 coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
 gcson = require 'gulp-cson'
 gulp = require 'gulp'
 ngAnnotate = require 'gulp-ng-annotate'
+sass = require 'gulp-ruby-sass'
 slim = require 'gulp-slim'
 sourcemaps = require 'gulp-sourcemaps'
+notify = require 'gulp-notify'
 
 bowerJavaScript = [
   'underscore/underscore.js'
@@ -53,6 +56,19 @@ gulp.task 'slim', ->
     .pipe(cached('slim'))
     .pipe(slim(pretty: true))
     .pipe(gulp.dest('app/static/html'))
+
+gulp.task 'icons', ->
+  gulp.src('bower_components/fontawesome/fonts/**.*')
+    .pipe(gulp.dest('./app/static/fonts'))
+
+gulp.task 'css', ->
+  sass('app/css/snip.scss', {
+      loadPath: [
+        'bower_components/fontawesome/scss'
+      ]
+    }).on('error', swallowError)
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest("app/static/css"))
 
 gulp.task 'cson', ->
   gulp.src('./*.cson')

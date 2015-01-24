@@ -21,7 +21,7 @@ form.form-horizontal.explore-save-form [
   .row
     table.col-sm-12.search-results
       tr
-        th
+        th.checkbox
           input type="checkbox" ng-model="searchController.allSelected"
         th Keyword
         th Url
@@ -29,13 +29,17 @@ form.form-horizontal.explore-save-form [
         th Use Count
         th
       tr ng-repeat="snip in searchController.snips"
-        td
+        td.checkbox
           input type="checkbox" ng-model="searchController.snipSelected[$index]"
         td ng-bind="snip.keyword"
-        td ng-bind="snip.url"
+        td.url ng-bind="snip.url" ng-attr-title="{{snip.url}}"
         td
+          i.fa.fa-globe
+          i.fa.fa-mobile
+          i.fa.fa-lock
+          i.fa.fa-arrows-h
           / alt/mobile/suggest present?
-        td ng-bind="snip.used_count"
+        td.count ng-bind="snip.used_count"
         td
           a href="/admin/edit/?keyword={{snip.keyword}}" Edit
 

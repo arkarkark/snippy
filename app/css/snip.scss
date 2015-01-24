@@ -1,3 +1,5 @@
+@import "font-awesome";
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
@@ -104,4 +106,24 @@ table.search-results tr:first-child {
 
 .right {
   float: right;
+}
+
+table.search-results td {
+  vertical-align: top;
+}
+
+table.search-results td.url {
+  max-width: 500px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+table.search-results .checkbox input[type=checkbox] {
+  margin-top: 0;
+}
+
+table.search-results .count {
+  text-align: right;
+  padding-right: 5px;
 }
