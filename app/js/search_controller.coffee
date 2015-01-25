@@ -8,8 +8,6 @@ angular.module('SnippySearch').controller('SearchController', (
 
   @searchChanged = =>
     $location.search('for', @searchText)
-    if @searchText.length > 3
-      @search()
 
   @search = ->
     @snips = Snip.query({search: @searchText})

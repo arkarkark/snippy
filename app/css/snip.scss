@@ -80,6 +80,10 @@ body {
   }
 }
 
+.right {
+  float: right;
+}
+
 input[type=checkbox].form-checkbox {
   margin-top: 11px;
 }
@@ -91,6 +95,7 @@ input[type=checkbox].form-checkbox {
   z-index: 30;
 }
 
+
 table.search-results {
   margin-bottom: 20px;
 /* SASS at some point...
@@ -98,32 +103,32 @@ table.search-results {
     border: 1px solid black;
   }
 */
+
+  tr:first-child {
+    background-color: #f5f5ff;
+  }
+
+  td {
+    vertical-align: top;
+  }
+
+  td.url {
+    max-width: 500px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .checkbox input[type=checkbox] {
+    margin-top: 0;
+  }
+
+  .count {
+    text-align: right;
+    padding-right: 5px;
+  }
 }
 
-table.search-results tr:first-child {
-  background-color: #f5f5ff;
-}
-
-.right {
-  float: right;
-}
-
-table.search-results td {
-  vertical-align: top;
-}
-
-table.search-results td.url {
-  max-width: 500px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-table.search-results .checkbox input[type=checkbox] {
-  margin-top: 0;
-}
-
-table.search-results .count {
-  text-align: right;
-  padding-right: 5px;
+button.export {
+  margin-left: 30px;
 }

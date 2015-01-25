@@ -11,6 +11,12 @@ form.form-horizontal.explore-save-form [
         ng-model="searchController.searchText"
         ng-change="searchController.searchChanged()"
       ]
+    .col-sm-4
+      span
+        button.btn.btn-primary> [
+          type="button"
+          ng-click="searchController.search()"
+        ] Search
 
 hr
 
@@ -80,8 +86,8 @@ hr
           ng-disabled="searchController.buttonsEnabled()"
           ng-click="searchController.delete(resultsForm)"
         ] Delete
-        button.btn> [
+        button.btn.export> [
           type="button"
-          ng-disabled="searchController.buttonsEnabled()"
+          ng-disabled="!searchController.snips.length"
           ng-click="searchController.export(resultsForm)"
         ] Export

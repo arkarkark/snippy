@@ -21,6 +21,7 @@ bowerJavaScript = [
   'angular-qrcode/qrcode.js'
   'angular-ui-grid/ui-grid.js'
   'angular-bootstrap/ui-bootstrap.js'
+  'angular-bootstrap/ui-bootstrap-tpls.js'
 ]
 
 bowerCss = [
@@ -81,5 +82,6 @@ gulp.task 'watch', ['build'], ->
   gulp.watch 'app/js/**/*.coffee', ['coffee']
   gulp.watch 'app/html/**/*.slim', ['slim']
   gulp.watch './*.cson', ['cson']
+  gulp.watch 'app/css/**/*.scss', ['css']
 
 gulp.task 'default', ['watch']
