@@ -23,8 +23,9 @@ class Snippy(crud_model.CrudNdbModel):
   mobile_url = ndb.TextProperty()  # used when requested form a mobile device
   suggest_url = ndb.TextProperty()  # used for suggest as you type
   private = ndb.BooleanProperty()
+  proxy = ndb.BooleanProperty()
+  promoted = ndb.BooleanProperty()
   used_count = ndb.IntegerProperty()
-  # TODO(ark): redirect_normally = ndb.BooleanProperty()
 
   def _pre_put_hook(self):
     memcache.delete(MISSING + self.keyword)

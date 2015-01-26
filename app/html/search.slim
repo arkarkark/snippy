@@ -40,11 +40,30 @@ form.form-horizontal.explore-save-form [
         td ng-bind="snip.keyword"
         td.url ng-bind="snip.url" ng-attr-title="{{snip.url}}"
         td
-          i.fa.fa-globe
-          i.fa.fa-mobile
-          i.fa.fa-lock
-          i.fa.fa-arrows-h
-          / alt/mobile/suggest present?
+          i.fa.fa-search<> [
+            ng-class="{fahide: snip.url.indexOf('%s') == -1}"
+            tooltip="{{snip.url.indexOf('%s') != -1 ? 'Searchable' : ''}}"
+          ]
+          i.fa.fa-search-minus<> [
+            ng-class="{fahide: !snip.alt_url}"
+            tooltip="{{snip.alt_url ? 'Alt Url Provided' : ''}}"
+          ]
+          i.fa.fa-lock<> [
+            ng-class="{fahide: !snip.private}"
+            tooltip="{{snip.private ? 'Private' : ''}}"
+          ]
+          i.fa.fa-globe<> [
+            ng-class="{fahide: !snip.promoted}"
+            tooltip="{{snip.promoted ? 'Promoted' : ''}}"
+          ]
+          i.fa.fa-mobile<> [
+            ng-class="{fahide: !snip.mobile_url}"
+            tooltip="{{snip.mobile_url ? 'Mobile URL:\n' + snip.mobile_url : ''}}"
+          ]
+          i.fa.fa-arrows-h<> [
+            ng-class="{fahide: !snip.proxy}"
+            tooltip="{{snip.proxy ? 'Proxy' : ''}}"
+          ]
         td.count ng-bind="snip.used_count"
         td
           a href="/admin/edit/?keyword={{snip.keyword}}" Edit
