@@ -10,6 +10,7 @@ app = angular.module('Snippy', [
   'ngResource'
   'monospaced.qrcode'
   'ui.bootstrap'
+  'cgBusy'
 ]).config(($locationProvider, $stateProvider, $urlRouterProvider) ->
   $locationProvider.html5Mode(true)
   $urlRouterProvider.otherwise('/admin/')
@@ -34,5 +35,4 @@ app = angular.module('Snippy', [
 ).run(($rootScope, $state, $stateParams) ->
   $rootScope.$state = $state
   $rootScope.$stateParams = $stateParams
-  console.log('snippy is inited')
 )

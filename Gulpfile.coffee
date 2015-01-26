@@ -20,12 +20,13 @@ bowerJavaScript = [
   'qrcode-generator/js/qrcode.js'
   'angular-qrcode/qrcode.js'
   'angular-ui-grid/ui-grid.js'
-  'angular-bootstrap/ui-bootstrap.js'
   'angular-bootstrap/ui-bootstrap-tpls.js'
+  'angular-busy/dist/angular-busy.js'
 ]
 
 bowerCss = [
   'bootstrap/dist/css/bootstrap.min.css'
+  'angular-busy/dist/angular-busy.css'
 ]
 
 swallowError = (err) ->

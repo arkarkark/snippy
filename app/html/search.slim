@@ -20,6 +20,10 @@ form.form-horizontal.explore-save-form [
 
 hr
 
+.row
+  .col-sm-12 cg-busy="searchController.snips.$promise"
+
+
 form.form-horizontal.explore-save-form [
   ng-show="searchController.snips.length"
   name="resultsForm"

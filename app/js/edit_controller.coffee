@@ -14,7 +14,8 @@ angular.module('SnippyEdit', []).controller('EditController', (
     $location.search('keyword', @snip.keyword)
 
   @save = (form) =>
-    console.log('save', form)
+    # TODO(ark) indicate saving is happening
+    # TODO(ark) handle errors
     if @snip.keyword != @original.keyword
       # TODO(ark): ask to save or replace?
       @snip.$save()

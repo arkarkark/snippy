@@ -10,6 +10,7 @@ angular.module('SnippySearch').controller('SearchController', (
     $location.search('for', @searchText)
 
   @search = ->
+    # TODO(ark) indicate search is happening
     @snips = Snip.query({search: @searchText})
 
   @update = ->

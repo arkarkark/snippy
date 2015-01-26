@@ -80,6 +80,7 @@ You can also just inherit from CrudHandler with your own Handler if you wish.
 import collections
 import datetime
 import json
+import time
 
 import webapp2
 
@@ -232,6 +233,8 @@ class CrudHandler(webapp2.RequestHandler):
   def get(self):
     """Return json for a specific or new entity. or search results."""
     del self.response.headers['Content-Type']
+
+    time.sleep(5)
 
     user = users.get_current_user()
 
