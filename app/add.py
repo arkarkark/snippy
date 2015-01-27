@@ -117,7 +117,7 @@ class AddHandler(wtwfhandler.WtwfHandler):
           template_values['orig_private'] = orig.private
           action = 'replace'
       else:
-        ns = model.Snippy(keyword=kw, url=url, owner=user, private=private)
+        ns = model.Snippy(keyword=kw, url=url, private=private)
         try:
           ns.put()
         except:
