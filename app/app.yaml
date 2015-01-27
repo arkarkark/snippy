@@ -15,6 +15,10 @@ handlers:
   static_files: static/wtwf.ico
   upload: static/wtwf.ico
 
+- url: /admin/api/user
+  script: main.app
+  login: optional
+
 - url: /admin/api/.*
   script: main.app
   login: admin

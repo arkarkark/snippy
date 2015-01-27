@@ -13,6 +13,7 @@ import redirectproxy
 import search
 import suggest
 import upload
+import user
 import model
 from lib.crud import crud_handler
 
@@ -25,6 +26,7 @@ app = webapp.WSGIApplication([
   ('/admin/api/junk.*', AHandler),
   ('/admin/api/snip.*', crud_handler.GetCrudHandler(model.Snippy)),
   ('/admin/api/upload', upload.UploadHandler),
+  ('/admin/api/user', user.UserHandler),
   ('/admin/add/(.*)', add.AddHandler),
   ('/admin/search.*', search.SearchHandler),
   ('/admin/suggestxml', suggest.SuggestXmlHandler),
