@@ -8,10 +8,9 @@ angular.module('SnippySearch').controller('SearchController', (
 
   @searchChanged = =>
     $location.search('for', @searchText)
-    if @searchText.length > 3
-      @search()
 
   @search = ->
+    # TODO(ark) indicate search is happening
     @snips = Snip.query({search: @searchText})
 
   @update = ->

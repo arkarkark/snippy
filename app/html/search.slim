@@ -11,8 +11,18 @@ form.form-horizontal.explore-save-form [
         ng-model="searchController.searchText"
         ng-change="searchController.searchChanged()"
       ]
+    .col-sm-4
+      span
+        button.btn.btn-primary> [
+          type="button"
+          ng-click="searchController.search()"
+        ] Search
 
 hr
+
+.row
+  .col-sm-12 cg-busy="searchController.snips.$promise"
+
 
 form.form-horizontal.explore-save-form [
   ng-show="searchController.snips.length"
@@ -21,7 +31,7 @@ form.form-horizontal.explore-save-form [
   .row
     table.col-sm-12.search-results
       tr
-        th
+        th.checkbox
           input type="checkbox" ng-model="searchController.allSelected"
         th Keyword
         th Url
@@ -29,13 +39,37 @@ form.form-horizontal.explore-save-form [
         th Use Count
         th
       tr ng-repeat="snip in searchController.snips"
-        td
+        td.checkbox
           input type="checkbox" ng-model="searchController.snipSelected[$index]"
-        td ng-bind="snip.keyword"
-        td ng-bind="snip.url"
+        td.keyword ng-attr-title="{{snip.keyword.length > 10 ? snip.keyword : ''}}"
+          a ng-href="/{{snip.keyword}}" target="_self" ng-bind="snip.keyword"
+        td.url ng-bind="snip.url" ng-attr-title="{{snip.url.length > 60 ? snip.url : ''}}"
         td
-          / alt/mobile/suggest present?
-        td ng-bind="snip.used_count"
+          i.fa.fa-search<> [
+            ng-class="{fahide: snip.url.indexOf('%s') == -1}"
+            tooltip="{{snip.url.indexOf('%s') != -1 ? 'Searchable' : ''}}"
+          ]
+          i.fa.fa-search-minus<> [
+            ng-class="{fahide: !snip.alt_url}"
+            tooltip="{{snip.alt_url ? 'Alt Url Provided' : ''}}"
+          ]
+          i.fa.fa-lock<> [
+            ng-class="{fahide: !snip.private}"
+            tooltip="{{snip.private ? 'Private' : ''}}"
+          ]
+          i.fa.fa-globe<> [
+            ng-class="{fahide: !snip.promoted}"
+            tooltip="{{snip.promoted ? 'Promoted' : ''}}"
+          ]
+          i.fa.fa-mobile<> [
+            ng-class="{fahide: !snip.mobile_url}"
+            tooltip="{{snip.mobile_url ? 'Mobile URL:\n' + snip.mobile_url : ''}}"
+          ]
+          i.fa.fa-arrows-h<> [
+            ng-class="{fahide: !snip.proxy}"
+            tooltip="{{snip.proxy ? 'Proxy' : ''}}"
+          ]
+        td.count ng-bind="snip.used_count"
         td
           a href="/admin/edit/?keyword={{snip.keyword}}" Edit
 
@@ -76,8 +110,8 @@ hr
           ng-disabled="searchController.buttonsEnabled()"
           ng-click="searchController.delete(resultsForm)"
         ] Delete
-        button.btn> [
+        button.btn.export> [
           type="button"
-          ng-disabled="searchController.buttonsEnabled()"
+          ng-disabled="!searchController.snips.length"
           ng-click="searchController.export(resultsForm)"
         ] Export

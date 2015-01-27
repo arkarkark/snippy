@@ -1,1 +1,29 @@
-{"name":"snippy","version":"0.0.1","homepage":"https://github.com/arkarkark/snippy","authors":["Alex W (wtwf.com)"],"description":"URL Shortener and Location Bar Command Line","main":"app.yaml","license":"MIT","private":true,"dependencies":{"jquery":"2.1.3","bootstrap":"~3.3.1","ui-router":"~0.2.13","angular":"~1.3.9","angular-resource":"~1.3.9","angular-qrcode":"~5.1.0","underscore":"~1.7.0","angular-ui-grid":"~3.0.0-rc.16","angular-bootstrap":"~0.12.0"},"resolutions":{"angular":">=1.3.9"}}
+{
+  "name": "snippy",
+  "version": "0.0.1",
+  "homepage": "https://github.com/arkarkark/snippy",
+  "authors": [
+    "Alex W (wtwf.com)"
+  ],
+  "description": "URL Shortener and Location Bar Command Line",
+  "main": "app.yaml",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.3.10",
+    "angular-bootstrap": "~0.12.0",
+    "angular-qrcode": "~5.1.0",
+    "angular-resource": "~1.3.9",
+    "angular-ui-grid": "~3.0.0-rc.16",
+    "bootstrap": "~3.3.1",
+    "bootstrap-sass-official": "~3.3.3",
+    "fontawesome": "~4.3.0",
+    "jquery": "2.1.3",
+    "ui-router": "~0.2.13",
+    "underscore": "~1.7.0",
+    "angular-busy": "~4.1.2"
+  },
+  "resolutions": {
+    "angular": ">=1.3.10"
+  }
+}

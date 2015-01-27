@@ -2,10 +2,11 @@
 
 __author__ = 'wtwf.com (Alex K)'
 
-import ConfigParser
-import StringIO
+import json
+import logging
 
 from google.appengine.api import users
+from google.appengine.ext import ndb
 
 from wtwf import wtwfhandler
 import model
@@ -16,33 +17,34 @@ class UploadHandler(wtwfhandler.WtwfHandler):
   def get(self):
     self.AssertAllowed()
     template_values = {}
-    self.SendTemplate('upload.html', {})
+    self.redirect('/admin/import')
 
   def post(self):
     self.AssertAllowed()
 
     user = users.get_current_user()
 
-    snipdb = self.request.get('myfile')
-    config = ConfigParser.ConfigParser()
+    snip_file = self.request.POST.get('myfile').file
+    logging.info('param: %r', snip_file)
 
-    snipdb_file = StringIO.StringIO(snipdb)
+    line = snip_file.readline()
+    if line != ")]}',\n":
+      snip_file.seek(0,0)
 
-    config.readfp(snipdb_file)
-    urls = []
-    if config.has_section('urls'):
-      for key, url in config.items('urls'):
-        url = url.strip('"')
-        u = model.GetByKeyword(key)
-        if (u):
-          status = 'already'
-        else:
-          try:
-            ns = model.Snippy(keyword=key, url=url, owner=user)
-            ns.put()
-            status = 'added'
-          except:
-            status = 'failed:'
+    snip_json = json.load(snip_file)
+    logging.info('read a line: %r', line)
 
-        urls.append(dict(keyword=key, url=url, status=status))
-    self.SendTemplate('import.html', dict(urls=urls))
+
+    logging.info('read some json: %r',
+                 json.dumps(snip_json, sort_keys=True, indent=4, separators=(',', ': ')))
+
+    snips = []
+    for snip_json in snip_json:
+      snip = model.Snippy(keyword='', url='')
+      snip.UpdateFromJsonDict(snip_json)
+      snips.append(snip)
+      logging.info('made: %r', snip.keyword)
+
+    ndb.put_multi(snips)
+
+    self.redirect('/admin/import')

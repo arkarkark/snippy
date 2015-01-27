@@ -1,11 +1,14 @@
+autoprefixer = require 'gulp-autoprefixer'
 cached = require 'gulp-cached'
 coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
-gcson = require 'gulp-cson'
 gulp = require 'gulp'
 ngAnnotate = require 'gulp-ng-annotate'
+rename = require 'gulp-rename'
+sass = require 'gulp-ruby-sass'
 slim = require 'gulp-slim'
 sourcemaps = require 'gulp-sourcemaps'
+notify = require 'gulp-notify'
 
 bowerJavaScript = [
   'underscore/underscore.js'
@@ -17,11 +20,13 @@ bowerJavaScript = [
   'qrcode-generator/js/qrcode.js'
   'angular-qrcode/qrcode.js'
   'angular-ui-grid/ui-grid.js'
-  'angular-bootstrap/ui-bootstrap.js'
+  'angular-bootstrap/ui-bootstrap-tpls.js'
+  'angular-busy/dist/angular-busy.js'
 ]
 
 bowerCss = [
   'bootstrap/dist/css/bootstrap.min.css'
+  'angular-busy/dist/angular-busy.css'
 ]
 
 swallowError = (err) ->
@@ -49,21 +54,33 @@ gulp.task 'coffee', ->
     .pipe(gulp.dest('app/static/js'))
 
 gulp.task 'slim', ->
-  gulp.src(('app/html/**/*.slim'))
+  gulp.src(('app/**/*.slim'))
     .pipe(cached('slim'))
+    .pipe(rename((path) ->
+      path.dirname = path.dirname.replace(/^(html|js)(\/|$)/, '')
+      path
+    ))
     .pipe(slim(pretty: true))
     .pipe(gulp.dest('app/static/html'))
 
-gulp.task 'cson', ->
-  gulp.src('./*.cson')
-    .pipe(gcson())
-    .pipe(gulp.dest('.'))
+gulp.task 'icons', ->
+  gulp.src('bower_components/fontawesome/fonts/**.*')
+    .pipe(gulp.dest('./app/static/fonts'))
 
-gulp.task 'build', ['coffee', 'slim', 'cson', 'bower:js', 'bower:css']
+gulp.task 'css', ->
+  sass('app/css/snip.scss', {
+      loadPath: [
+        'bower_components/fontawesome/scss'
+      ]
+    }).on('error', swallowError)
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest("app/static/css"))
+
+gulp.task 'build', ['coffee', 'slim', 'bower:js', 'bower:css']
 
 gulp.task 'watch', ['build'], ->
   gulp.watch 'app/js/**/*.coffee', ['coffee']
-  gulp.watch 'app/html/**/*.slim', ['slim']
-  gulp.watch './*.cson', ['cson']
+  gulp.watch 'app/**/*.slim', ['slim']
+  gulp.watch 'app/css/**/*.scss', ['css']
 
 gulp.task 'default', ['watch']

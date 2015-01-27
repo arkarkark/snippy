@@ -1,3 +1,5 @@
+@import "font-awesome";
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
@@ -78,6 +80,10 @@ body {
   }
 }
 
+.right {
+  float: right;
+}
+
 input[type=checkbox].form-checkbox {
   margin-top: 11px;
 }
@@ -89,6 +95,7 @@ input[type=checkbox].form-checkbox {
   z-index: 30;
 }
 
+
 table.search-results {
   margin-bottom: 20px;
 /* SASS at some point...
@@ -96,12 +103,47 @@ table.search-results {
     border: 1px solid black;
   }
 */
+
+  tr:first-child {
+    background-color: #f5f5ff;
+  }
+
+  td {
+    vertical-align: top;
+  }
+
+  td.url {
+    max-width: 500px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  td.keyword {
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .checkbox input[type=checkbox] {
+    margin-top: 0;
+  }
+
+  .count {
+    text-align: right;
+    padding-right: 5px;
+  }
 }
 
-table.search-results tr:first-child {
-  background-color: #f5f5ff;
+button.export {
+  margin-left: 30px;
 }
 
-.right {
+.fa.fahide {
+  opacity: 0;
+}
+
+.user {
   float: right;
 }
