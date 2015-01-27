@@ -1,4 +1,8 @@
-form.form-horizontal.explore-save-form [
+.row
+  .col-sm-12 cg-busy="editController.snip.$promise"
+
+
+form.form-horizontal [
   name="editForm"
   ng-submit="editController.save(editForm)"
   lk-enter="editController.save(editForm)"

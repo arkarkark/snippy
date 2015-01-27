@@ -5,7 +5,7 @@ angular.module('SnippyEdit', []).controller('EditController', (
     QrService.settings(@getUrl())
 
   @originalKeyword = $location.search().keyword || ''
-  Snip.query({keyword: @originalKeyword}, (snips) =>
+  @snip = Snip.query({keyword: @originalKeyword}, (snips) =>
     @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: 'new'})
     @original = angular.copy(@snip)
   )

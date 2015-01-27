@@ -234,8 +234,6 @@ class CrudHandler(webapp2.RequestHandler):
     """Return json for a specific or new entity. or search results."""
     del self.response.headers['Content-Type']
 
-    time.sleep(5)
-
     user = users.get_current_user()
 
     # This could be a query (search) or a req. for a specific (or new) entity.

@@ -5,6 +5,11 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /static/fonts/(.*\.woff2)
+  static_files: static/fonts/\1
+  upload: static/fonts/(.*\.woff2)
+  mime_type: font/woff2
+
 - url: /static
   static_dir: static
 
