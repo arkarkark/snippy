@@ -41,8 +41,9 @@ form.form-horizontal.explore-save-form [
       tr ng-repeat="snip in searchController.snips"
         td.checkbox
           input type="checkbox" ng-model="searchController.snipSelected[$index]"
-        td ng-bind="snip.keyword"
-        td.url ng-bind="snip.url" ng-attr-title="{{snip.url}}"
+        td.keyword ng-attr-title="{{snip.keyword.length > 10 ? snip.keyword : ''}}"
+          a ng-href="/{{snip.keyword}}" target="_self" ng-bind="snip.keyword"
+        td.url ng-bind="snip.url" ng-attr-title="{{snip.url.length > 60 ? snip.url : ''}}"
         td
           i.fa.fa-search<> [
             ng-class="{fahide: snip.url.indexOf('%s') == -1}"

@@ -119,6 +119,13 @@ table.search-results {
     white-space: nowrap;
   }
 
+  td.keyword {
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
   .checkbox input[type=checkbox] {
     margin-top: 0;
   }
