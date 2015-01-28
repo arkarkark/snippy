@@ -12,6 +12,7 @@ import google.appengine.api.urlfetch
 from wtwf import wtwfhandler
 import model
 
+
 class SuggestHandler(wtwfhandler.WtwfHandler):
   def get(self):
     q = self.request.get('q')

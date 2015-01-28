@@ -32,6 +32,14 @@ handlers:
   script: main.app
   login: admin
 
+- url: /admin/suggest.*
+  script: main.app
+  login: optional
+
+- url: /admin/suggestxml
+  script: main.app
+  login: optional
+
 - url: /admin/.*
   static_files: static/html/admin.html
   upload: static/html/admin.html
