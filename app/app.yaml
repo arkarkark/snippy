@@ -5,7 +5,8 @@ api_version: 1
 threadsafe: true
 
 skip_files:
-- ^(.*/)?_test.pyc?
+- ^(.*/)?_test\.pyc?
+- .*\.pyc$
 
 handlers:
 - url: /static/fonts/(.*\.woff2)

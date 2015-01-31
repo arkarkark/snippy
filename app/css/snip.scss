@@ -1,3 +1,5 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
 @import "font-awesome";
 
 /* Space out content a bit */
@@ -146,4 +148,11 @@ button.export {
 
 .user {
   float: right;
+}
+
+.swap {
+  position: absolute;
+  right: 20px;
+  top: 82px;
+  @include user-select(none);
 }

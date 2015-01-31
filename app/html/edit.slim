@@ -15,11 +15,20 @@ form.form-horizontal [
         ng-model="editController.snip.keyword"
         ng-change="editController.keywordChanged()"
       ]
+    .col-sm-6
+      input.form-control#keyword [
+        ark-select-all
+        ark-focus="editController.snip.$promise"
+        value="{{editController.snipUrl()}}"
+      ]
 
   .form-group
     label.col-sm-2.control-label for="url" Url
     .col-sm-10
       input.form-control#url ng-model="editController.snip.url"
+    .swap ng-click="editController.swapUrlAltUrl()"
+      .fa.fa-arrow-up
+      .fa.fa-arrow-down
 
   .form-group
     label.col-sm-2.control-label for="alt" Alt Url
@@ -41,13 +50,14 @@ form.form-horizontal [
     .col-sm-2
       input.form-checkbox#private type="checkbox" ng-model="editController.snip.private"
     .col-sm-8
-      qrcode.qr [
-        ng-show="editController.snip.keyword"
-        size="110"
-        version="{{editController.qrSettings().version}}"
-        error-correction-level="{{editController.qrSettings().level}}"
-        data="{{editController.getUrl()}}"
-      ]
+      a ng-href="{{editController.snipUrl()}}" target="_self"
+        qrcode.qr [
+          ng-show="editController.snip.keyword"
+          size="110"
+          version="{{editController.qrSettings().version}}"
+          error-correction-level="{{editController.qrSettings().level}}"
+          data="{{editController.getUrl()}}"
+        ]
 
   .form-group
     label.col-sm-2.control-label for="proxy" Proxy

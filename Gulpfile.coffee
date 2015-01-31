@@ -2,6 +2,7 @@ autoprefixer = require 'gulp-autoprefixer'
 cached = require 'gulp-cached'
 coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
+eventStream = require 'event-stream'
 gulp = require 'gulp'
 ngAnnotate = require 'gulp-ng-annotate'
 rename = require 'gulp-rename'
@@ -25,7 +26,6 @@ bowerJavaScript = [
 ]
 
 bowerCss = [
-  'bootstrap/dist/css/bootstrap.min.css'
   'angular-busy/dist/angular-busy.css'
 ]
 
@@ -37,11 +37,6 @@ gulp.task 'bower:js', ->
   gulp.src(("bower_components/#{fname}" for fname in bowerJavaScript))
     .pipe(concat('vendor.js').on('error', swallowError))
     .pipe(gulp.dest('app/static/js'))
-
-gulp.task 'bower:css', ->
-  gulp.src(("bower_components/#{fname}" for fname in bowerCss))
-    .pipe(concat('vendor.css').on('error', swallowError))
-    .pipe(gulp.dest('app/static/css'))
 
 # If you uglify this you need to make it angular dependency injection aware
 gulp.task 'coffee', ->
@@ -68,15 +63,21 @@ gulp.task 'icons', ->
     .pipe(gulp.dest('./app/static/fonts'))
 
 gulp.task 'css', ->
-  sass('app/css/snip.scss', {
+  bowerFiles = gulp.src(("bower_components/#{fname}" for fname in bowerCss))
+
+  sassFiles = sass('app/css/snip.scss', {
       loadPath: [
+        'bower_components/bootstrap-sass-official/assets/stylesheets'
         'bower_components/fontawesome/scss'
       ]
     }).on('error', swallowError)
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest("app/static/css"))
 
-gulp.task 'build', ['coffee', 'slim', 'bower:js', 'bower:css']
+  eventStream.concat(bowerFiles, sassFiles)
+      .pipe(concat('snip.css'))
+      .pipe(gulp.dest("app/static/css"))
+
+gulp.task 'build', ['coffee', 'slim', 'bower:js', 'css']
 
 gulp.task 'watch', ['build'], ->
   gulp.watch 'app/js/**/*.coffee', ['coffee']

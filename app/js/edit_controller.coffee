@@ -1,6 +1,5 @@
 angular.module('SnippyEdit', []).controller('EditController', (
   $location, $scope, Snip, QrService) ->
-
   @qrSettings = =>
     QrService.settings(@getUrl())
 
@@ -12,6 +11,12 @@ angular.module('SnippyEdit', []).controller('EditController', (
 
   @keywordChanged = =>
     $location.search('keyword', @snip.keyword)
+
+  @snipUrl = =>
+    if @snip.keyword then "#{$location.absUrl().split('/').splice(0,3).join('/')}/#{@snip.keyword}" else ''
+
+  @swapUrlAltUrl = =>
+    [@snip.url, @snip.alt_url] = [@snip.alt_url, @snip.url]
 
   @save = (form) =>
     # TODO(ark) indicate saving is happening
