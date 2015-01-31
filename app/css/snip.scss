@@ -121,6 +121,10 @@ table.search-results {
     white-space: nowrap;
   }
 
+  td.icons {
+    min-width: 87px;
+  }
+
   td.keyword {
     max-width: 100px;
     text-overflow: ellipsis;
@@ -130,6 +134,10 @@ table.search-results {
 
   .checkbox input[type=checkbox] {
     margin-top: 0;
+  }
+
+  th.checkbox input[type=checkbox] {
+    margin-top: 7px;
   }
 
   .count {

@@ -44,7 +44,7 @@ form.form-horizontal.explore-save-form [
         td.keyword ng-attr-title="{{snip.keyword.length > 10 ? snip.keyword : ''}}"
           a ng-href="/{{snip.keyword}}" target="_self" ng-bind="snip.keyword"
         td.url ng-bind="snip.url" ng-attr-title="{{snip.url.length > 60 ? snip.url : ''}}"
-        td
+        td.icons
           i.fa.fa-search<> [
             ng-class="{fahide: snip.url.indexOf('%s') == -1}"
             tooltip="{{snip.url.indexOf('%s') != -1 ? 'Searchable' : ''}}"
@@ -70,8 +70,9 @@ form.form-horizontal.explore-save-form [
             tooltip="{{snip.proxy ? 'Proxy' : ''}}"
           ]
         td.count ng-bind="snip.used_count"
-        td
-          a href="/admin/edit/?keyword={{snip.keyword}}" Edit
+        td tooltip="Edit"
+          a href="/admin/edit/?keyword={{snip.keyword}}"
+            i.fa.fa-pencil
 
 hr
 
