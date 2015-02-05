@@ -21,7 +21,7 @@ form.form-horizontal.explore-save-form [
 hr
 
 .row
-  .col-sm-12 cg-busy="searchController.snips.$promise"
+  .col-sm-12 cg-busy="{promise: searchController.busy, message: searchController.busyMessage || 'Please wait'}"
 
 
 form.form-horizontal.explore-save-form [

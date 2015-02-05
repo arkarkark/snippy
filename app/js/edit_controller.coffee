@@ -5,7 +5,7 @@ angular.module('SnippyEdit', []).controller('EditController', (
 
   @originalKeyword = $location.search().keyword || ''
   @snip = Snip.query({keyword: @originalKeyword}, (snips) =>
-    @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: 'new'})
+    @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: ''})
     @original = angular.copy(@snip)
   )
 
@@ -19,14 +19,13 @@ angular.module('SnippyEdit', []).controller('EditController', (
     [@snip.url, @snip.alt_url] = [@snip.alt_url, @snip.url]
 
   @save = (form) =>
-    # TODO(ark) indicate saving is happening
     # TODO(ark) handle errors
     if @snip.keyword != @original.keyword
       # TODO(ark): ask to save or replace?
-      @snip.$save()
+      @busy = @snip.$save()
     else
-      @snip.$save()
-
+      @busy = @snip.$save()
+    @busyMessage = 'Saving'
 
   @delete = (form) =>
     console.log('delete', form)

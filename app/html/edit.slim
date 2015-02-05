@@ -14,11 +14,12 @@ form.form-horizontal [
       input.form-control#keyword [
         ng-model="editController.snip.keyword"
         ng-change="editController.keywordChanged()"
+        ark-focus="!editController.snip.id"
       ]
     .col-sm-6
       input.form-control#keyword [
         ark-select-all
-        ark-focus="editController.snip.$promise"
+        ark-focus="editController.snip.id"
         value="{{editController.snipUrl()}}"
       ]
 
@@ -70,7 +71,8 @@ form.form-horizontal [
       input.form-checkbox#promoted type="checkbox" ng-model="editController.snip.promoted"
 
   .form-group
-    .col-sm-8
+    .col-sm-8 cg-busy="{promise: editController.busy, message: editController.busyMessage || 'Please wait'}"
+
     .col-sm-2
       button.btn.btn-primary [
         type="submit"

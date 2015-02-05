@@ -11,7 +11,7 @@ from google.appengine.ext import ndb
 from wtwf import wtwfhandler
 import model
 
-class UploadHandler(wtwfhandler.WtwfHandler):
+class ImportHandler(wtwfhandler.WtwfHandler):
 
   @wtwfhandler.admin_required
   def get(self):
@@ -32,18 +32,23 @@ class UploadHandler(wtwfhandler.WtwfHandler):
       snip_file.seek(0,0)
 
     snip_json = json.load(snip_file)
-    logging.info('read a line: %r', line)
 
-
-    logging.info('read some json: %r',
-                 json.dumps(snip_json, sort_keys=True, indent=4, separators=(',', ': ')))
+    existing_snips = set()
+    # Find existing keywords
+    for result in model.Snippy.query().iter():
+      existing_snips.add(result.keyword)
+    logging.info('There are %d existing snips', len(existing_snips))
 
     snips = []
     for snip_json in snip_json:
       snip = model.Snippy(keyword='', url='')
+      del snip_json['id']
       snip.UpdateFromJsonDict(snip_json)
-      snips.append(snip)
-      logging.info('made: %r', snip.keyword)
+      if snip.keyword in existing_snips:
+        logging.info('ignoring duplicate: %r', snip.keyword)
+      else:
+        snips.append(snip)
+        logging.info('made: %r', snip.keyword)
 
     ndb.put_multi(snips)
 
