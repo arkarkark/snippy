@@ -72,6 +72,8 @@ form.form-horizontal [
 
   .form-group
     .col-sm-8 cg-busy="{promise: editController.busy, message: editController.busyMessage || 'Please wait'}"
+      label.message
+        | {{editController.message}}
 
     .col-sm-2
       button.btn.btn-primary [

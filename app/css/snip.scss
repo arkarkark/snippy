@@ -164,3 +164,8 @@ button.export {
   top: 82px;
   @include user-select(none);
 }
+
+.message {
+  float: right;
+  padding-top: 7px;
+}
