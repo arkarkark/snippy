@@ -7,9 +7,13 @@ import logging
 import os
 
 from google.appengine.api import users
+from google.appengine.ext.webapp import template
+
+import jinja2
 
 from wtwf import wtwfhandler
 import model
+import snippy_config
 
 __pychecker__ = 'no-override'
 
@@ -78,5 +82,10 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
         self.redirect(url.encode('utf-8'))
       return
 
-    file_name = os.path.join(os.path.dirname(__file__), 'static/default.html')
-    self.response.out.write(open(file_name).read())
+    config = snippy_config.SnippyConfig()
+    default_url = config.get('defaultUrl')
+    if default_url:
+      self.redirect(str(jinja2.Template(default_url).render({'url': lookup})))
+    else:
+      file_name = os.path.join(os.path.dirname(__file__), 'static/default.html')
+      self.response.out.write(open(file_name).read())

@@ -35,9 +35,9 @@ class SuggestXmlHandler(wtwfhandler.WtwfHandler):
     config = snippy_config.SnippyConfig()
     template_values = {
       'host': self.GetBaseUrl(),
-      'shortName': config.get('shortName'),
-      'description': config.get('description'),
-      'developer': config.get('developer'),
+      'shortName': config.get('shortName', 'shortName'),
+      'description': config.get('description', 'description'),
+      'developer': config.get('developer', 'developer'),
     }
     xmltype = 'application/opensearchdescription+xml'
     self.response.headers['Content-Type'] = xmltype

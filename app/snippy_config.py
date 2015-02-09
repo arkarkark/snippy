@@ -9,5 +9,5 @@ class SnippyConfig:
     else:
       self.config = {}
 
-  def get(self, key):
-    return self.config.get(key, key)
+  def get(self, key, default=None):
+    return self.config.get(key, default)
