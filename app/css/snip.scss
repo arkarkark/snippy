@@ -1,3 +1,5 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
 @import "font-awesome";
 
 /* Space out content a bit */
@@ -119,6 +121,10 @@ table.search-results {
     white-space: nowrap;
   }
 
+  td.icons {
+    min-width: 87px;
+  }
+
   td.keyword {
     max-width: 100px;
     text-overflow: ellipsis;
@@ -128,6 +134,10 @@ table.search-results {
 
   .checkbox input[type=checkbox] {
     margin-top: 0;
+  }
+
+  th.checkbox input[type=checkbox] {
+    margin-top: 7px;
   }
 
   .count {
@@ -146,4 +156,16 @@ button.export {
 
 .user {
   float: right;
+}
+
+.swap {
+  position: absolute;
+  right: 20px;
+  top: 82px;
+  @include user-select(none);
+}
+
+.message {
+  float: right;
+  padding-top: 7px;
 }

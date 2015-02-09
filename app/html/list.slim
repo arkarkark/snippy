@@ -8,7 +8,7 @@ ul
   li
     a href="/admin/import/" Import a JSON file of snips
   li
-    a> href="javascript:window.external.AddSearchProvider('/admin/suggestxml');"
+    a> href="javascript:window.external.AddSearchProvider(window.location.href.split('/').splice(0,3).join('/') + '/admin/suggestxml');"
       | Add Snippy Search to your browser
     | (xml
     a< target="_self" href="/admin/suggestxml" here

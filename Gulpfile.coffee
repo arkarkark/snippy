@@ -2,6 +2,8 @@ autoprefixer = require 'gulp-autoprefixer'
 cached = require 'gulp-cached'
 coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
+eventStream = require 'event-stream'
+fs = require 'fs'
 gulp = require 'gulp'
 ngAnnotate = require 'gulp-ng-annotate'
 rename = require 'gulp-rename'
@@ -9,6 +11,23 @@ sass = require 'gulp-ruby-sass'
 slim = require 'gulp-slim'
 sourcemaps = require 'gulp-sourcemaps'
 notify = require 'gulp-notify'
+yargs = require 'yargs'
+
+argv = yargs.argv
+
+# You can now choose the branding of snippy
+# copy snippy_config.json, favicon.ico and default.html from branding.wtwf into branding.yourdomain
+# You can specify the branding directory to use several ways.
+# gulp --branding=branding.yourdomain
+# or ONE of these...
+# echo branding.yourdomain > branding
+# ln -s branding.yourdomain branding
+brandingDir = argv.branding
+try
+  brandingDir ?= fs.readlinkSync('branding')
+try
+  brandingDir ?= fs.readFileSync('branding').toString()
+brandingDir ?= 'branding.wtwf'
 
 bowerJavaScript = [
   'underscore/underscore.js'
@@ -25,7 +44,6 @@ bowerJavaScript = [
 ]
 
 bowerCss = [
-  'bootstrap/dist/css/bootstrap.min.css'
   'angular-busy/dist/angular-busy.css'
 ]
 
@@ -37,11 +55,6 @@ gulp.task 'bower:js', ->
   gulp.src(("bower_components/#{fname}" for fname in bowerJavaScript))
     .pipe(concat('vendor.js').on('error', swallowError))
     .pipe(gulp.dest('app/static/js'))
-
-gulp.task 'bower:css', ->
-  gulp.src(("bower_components/#{fname}" for fname in bowerCss))
-    .pipe(concat('vendor.css').on('error', swallowError))
-    .pipe(gulp.dest('app/static/css'))
 
 # If you uglify this you need to make it angular dependency injection aware
 gulp.task 'coffee', ->
@@ -68,19 +81,30 @@ gulp.task 'icons', ->
     .pipe(gulp.dest('./app/static/fonts'))
 
 gulp.task 'css', ->
-  sass('app/css/snip.scss', {
+  bowerFiles = gulp.src(("bower_components/#{fname}" for fname in bowerCss))
+
+  sassFiles = sass('app/css/snip.scss', {
       loadPath: [
+        'bower_components/bootstrap-sass-official/assets/stylesheets'
         'bower_components/fontawesome/scss'
       ]
     }).on('error', swallowError)
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest("app/static/css"))
 
-gulp.task 'build', ['coffee', 'slim', 'bower:js', 'bower:css']
+  eventStream.concat(bowerFiles, sassFiles)
+      .pipe(concat('snip.css'))
+      .pipe(gulp.dest("app/static/css"))
+
+gulp.task 'brand', ->
+  gulp.src(brandingDir + '/**.*')
+    .pipe(gulp.dest('./app/static'))
+
+gulp.task 'build', ['coffee', 'slim', 'bower:js', 'css', 'icons', 'brand']
 
 gulp.task 'watch', ['build'], ->
   gulp.watch 'app/js/**/*.coffee', ['coffee']
   gulp.watch 'app/**/*.slim', ['slim']
   gulp.watch 'app/css/**/*.scss', ['css']
+  gulp.watch brandingDir + '/**/*', ['brand']
 
 gulp.task 'default', ['watch']

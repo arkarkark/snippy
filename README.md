@@ -11,14 +11,7 @@ it also has some other features:
 # Install
 
 ```bash
-bundle install
-npm install
-bower install
-# dateutil
-mkdir vendor
-curl -o - http://labix.org/download/python-dateutil/python-dateutil-1.5.tar.gz |
-    tar -zxv -C vendor -f -
-ln -s ../vendor/python-dateutil-1.5/dateutil dateutil
+make setup
 # run the dev server
 make dev
 # then make install

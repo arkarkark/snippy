@@ -315,7 +315,7 @@ class CrudHandler(webapp2.RequestHandler):
     else:
       parent_key = None
 
-    if key_id == crud_model.NEW_ENTITY_ID:
+    if key_id == crud_model.NEW_ENTITY_ID or key_id == '':
       ex = self._CreateNewEntity(parent=parent_key)
     else:
       ex = self.model.get_by_id(long(key_id), parent=parent_key)

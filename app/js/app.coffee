@@ -3,14 +3,16 @@
 angular.module('SnippySearch', [])
 
 app = angular.module('Snippy', [
+  'Focus'
+  'QrCode'
+  'SelectAll'
   'SnippyEdit'
   'SnippySearch'
-  'QrCode'
-  'ui.router'
-  'ngResource'
-  'monospaced.qrcode'
-  'ui.bootstrap'
   'cgBusy'
+  'monospaced.qrcode'
+  'ngResource'
+  'ui.bootstrap'
+  'ui.router'
 ]).config(($locationProvider, $stateProvider, $urlRouterProvider) ->
   $locationProvider.html5Mode(true)
   $urlRouterProvider.otherwise('/admin/')

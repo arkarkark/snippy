@@ -11,6 +11,7 @@ import google.appengine.api.urlfetch
 
 from wtwf import wtwfhandler
 import model
+import snippy_config
 
 class SuggestHandler(wtwfhandler.WtwfHandler):
   def get(self):
@@ -25,28 +26,25 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
         # TODO(ark): do we want to support {searchTerms} as well as %s?
         url = snippy.suggest_url.replace('%s', urllib.quote(parts[1]))
         res = google.appengine.api.urlfetch.fetch(url)
-        self.response.out.write(fixupSuggestReply(url, parts[0], res.content))
+        reply = fixupSuggestReply(url, parts, res.content)
+        self.response.out.write(reply)
 
 
 class SuggestXmlHandler(wtwfhandler.WtwfHandler):
   def get(self):
-    template_values = {'host': self.GetBaseUrl()}
+    config = snippy_config.SnippyConfig()
+    template_values = {
+      'host': self.GetBaseUrl(),
+      'shortName': config.get('shortName', 'shortName'),
+      'description': config.get('description', 'description'),
+      'developer': config.get('developer', 'developer'),
+    }
     xmltype = 'application/opensearchdescription+xml'
     self.response.headers['Content-Type'] = xmltype
     self.SendTemplate('opensearch.xml', template_values)
 
-def fixupUrbanDictionary(keyword, reply):
-  reply = reply[reply.find('"') + 1:-1]
-  reply = re.sub(r'\\u003C(/?strong|/?ul|/?span|li[^\\]*)\\u003E', '', reply)
-  reply = reply.split('\u003C/li\u003E')
-  if reply[-2] == 'more...':
-    reply = reply[0:-2]
-  reply = ['%s %s' % (keyword, reply[0]),
-           ['%s %s' % (keyword, r) for r in reply[1:]]]
-  return json.dumps(reply)
-
 JSONP_START_RE = re.compile(r'^[a-zA-Z0-9_.]+\(', re.MULTILINE)
-FIXUP_MAP = {'http://ajax.urbandictionary.com': fixupUrbanDictionary}
+FIXUP_MAP = {}
 
 def getUrlHost(url):
   try:
@@ -62,11 +60,14 @@ def getJson(s):
     pass
   return s
 
-def fixupSuggestReply(url, keyword, reply):
+def fixupSuggestReply(url, parts, reply):
   """Takes a suggest url reply and add the keyword to every suggestion."""
+  keyword = parts[0]
+  search_term = parts[1]
+  reply_key = ' '.join(parts)
+
   # get domain of url
   url = getUrlHost(url)
-  print url
   if url in FIXUP_MAP:
     return FIXUP_MAP[url](keyword, reply)
 
@@ -75,10 +76,16 @@ def fixupSuggestReply(url, keyword, reply):
 
   # first decode it
   obj = json.loads(reply)
-  # fix up the search term in the result
-  obj[0] = keyword + ' ' + obj[0]
-  # then fix up each result
-  obj[1] = [fixupSuggestReplyEntry(keyword, x) for x in obj[1]]
+
+  if len(obj) >= 2 and isinstance(obj[1], list):
+    # result is ['searchTerm', ['option1', 'option2']]
+    # fix up the search term in the result
+    obj[0] = reply_key
+    obj[1] = [fixupSuggestReplyEntry(keyword, x) for x in obj[1]]
+  else:
+    # assume result is ['option1', 'option2']
+    obj = [reply_key, [fixupSuggestReplyEntry(keyword, x) for x in obj]]
+
   # then reencode it and send it back
   return json.dumps(obj)
 
@@ -87,8 +94,6 @@ def fixupSuggestReplyEntry(keyword, entry):
     return keyword + ' ' + removeBold(entry)
   else:
     return keyword + ' ' + removeBold(entry[0])
-
-
 
 BOLD_RE = re.compile(r'(\u003C/?b\u003E|</?b>)', re.MULTILINE)
 

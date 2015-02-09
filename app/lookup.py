@@ -4,11 +4,16 @@ __author__ = 'wtwf.com (Alex K)'
 
 import urllib
 import logging
+import os
 
 from google.appengine.api import users
+from google.appengine.ext.webapp import template
+
+import jinja2
 
 from wtwf import wtwfhandler
 import model
+import snippy_config
 
 __pychecker__ = 'no-override'
 
@@ -30,7 +35,6 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
 
     # look up the keyword
     snippy = model.GetByKeyword(path_info)
-    template_values = {}
     url = None
     if snippy:
       url = self.GetUrl(snippy)
@@ -60,7 +64,6 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
           user = users.get_current_user()
           if user:
             url = None
-            template_values['message'] = 'Access Denied'
           else:
             self.redirect(users.create_login_url(self.request.uri))
             return
@@ -77,7 +80,12 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
       else:
         # logging.info("No referrer so just using regular redirect")
         self.redirect(url.encode('utf-8'))
-
       return
 
-    self.SendTemplate('default.html', template_values)
+    config = snippy_config.SnippyConfig()
+    default_url = config.get('defaultUrl')
+    if default_url:
+      self.redirect(str(jinja2.Template(default_url).render({'url': lookup})))
+    else:
+      file_name = os.path.join(os.path.dirname(__file__), 'static/default.html')
+      self.response.out.write(open(file_name).read())

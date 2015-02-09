@@ -2,15 +2,15 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
                        xmlns:moz="http://www.mozilla.org/2006/browser/search/">
   <!-- Created on Thu, 14 May 2009 22:49:40 GMT -->
-  <ShortName>snippy</ShortName>
-  <Description>snippy</Description>
-  <Url template="{{host}}/{searchTerms}" 
-       type="text/html" 
+  <ShortName>{{shortName}}</ShortName>
+  <Description>{{description}}</Description>
+  <Url template="{{host}}/{searchTerms}"
+       type="text/html"
        method="get"></Url>
-  <Url template="{{host}}/admin/suggest?q={searchTerms}" 
-       type="application/x-suggestions+json" 
+  <Url template="{{host}}/admin/suggest?q={searchTerms}"
+       type="application/x-suggestions+json"
        method="get"></Url>
-  <Image width="16" height="16">{{host}}/static/wtwf.ico</Image>
-  <Developer>Ark</Developer>
+  <Image width="16" height="16">{{host}}/favicon.ico</Image>
+  <Developer>{{developer}}</Developer>
   <InputEncoding>UTF-8</InputEncoding>
 </OpenSearchDescription>
