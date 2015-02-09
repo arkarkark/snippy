@@ -11,7 +11,7 @@ import google.appengine.api.urlfetch
 
 from wtwf import wtwfhandler
 import model
-
+import snippy_config
 
 class SuggestHandler(wtwfhandler.WtwfHandler):
   def get(self):
@@ -32,7 +32,13 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
 
 class SuggestXmlHandler(wtwfhandler.WtwfHandler):
   def get(self):
-    template_values = {'host': self.GetBaseUrl()}
+    config = snippy_config.SnippyConfig()
+    template_values = {
+      'host': self.GetBaseUrl(),
+      'shortName': config.get('shortName'),
+      'description': config.get('description'),
+      'developer': config.get('developer'),
+    }
     xmltype = 'application/opensearchdescription+xml'
     self.response.headers['Content-Type'] = xmltype
     self.SendTemplate('opensearch.xml', template_values)
