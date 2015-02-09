@@ -7,6 +7,7 @@ fs = require 'fs'
 gulp = require 'gulp'
 ngAnnotate = require 'gulp-ng-annotate'
 rename = require 'gulp-rename'
+run = require 'gulp-run'
 sass = require 'gulp-ruby-sass'
 slim = require 'gulp-slim'
 sourcemaps = require 'gulp-sourcemaps'
@@ -98,13 +99,20 @@ gulp.task 'css', ->
 gulp.task 'brand', ->
   gulp.src(brandingDir + '/**.*')
     .pipe(gulp.dest('./app/static'))
+  gulp.src(brandingDir + '/default.html')
+    .pipe(gulp.dest('./app/brand'))
+  gulp.src(brandingDir + '/snippy_config.json')
+    .pipe(gulp.dest('./app/brand'))
 
-gulp.task 'build', ['coffee', 'slim', 'bower:js', 'css', 'icons', 'brand']
+gulp.task 'appyaml', ['brand'], ->
+  run('./app/make_app.yaml.py').exec()
+
+gulp.task 'build', ['coffee', 'slim', 'bower:js', 'css', 'icons', 'brand', 'appyaml']
 
 gulp.task 'watch', ['build'], ->
   gulp.watch 'app/js/**/*.coffee', ['coffee']
   gulp.watch 'app/**/*.slim', ['slim']
   gulp.watch 'app/css/**/*.scss', ['css']
-  gulp.watch brandingDir + '/**/*', ['brand']
+  gulp.watch brandingDir + '/**/*', ['brand', 'appyaml']
 
 gulp.task 'default', ['watch']
