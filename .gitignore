@@ -10,3 +10,4 @@ app/static
 .sass-cache
 branding
 app/brand
+app/app.yaml
