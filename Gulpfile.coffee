@@ -98,6 +98,10 @@ gulp.task 'css', ->
 gulp.task 'brand', ->
   gulp.src(brandingDir + '/**.*')
     .pipe(gulp.dest('./app/static'))
+  gulp.src(brandingDir + '/default.html')
+    .pipe(gulp.dest('./app/brand'))
+  gulp.src(brandingDir + '/snippy_config.json')
+    .pipe(gulp.dest('./app/brand'))
 
 gulp.task 'build', ['coffee', 'slim', 'bower:js', 'css', 'icons', 'brand']
 
