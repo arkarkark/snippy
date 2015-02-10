@@ -99,11 +99,11 @@ gulp.task 'css', ->
       .pipe(gulp.dest("app/static/css"))
 
 gulp.task 'brand', ->
-  gulp.src(brandingDir + '/**.*')
+  gulp.src("#{brandingDir}/static/**")
     .pipe(gulp.dest('./app/static'))
-  gulp.src(brandingDir + '/default.html')
+  gulp.src("#{brandingDir}/default.html")
     .pipe(gulp.dest('./app/brand'))
-  gulp.src(brandingDir + '/snippy_config.cson')
+  gulp.src("#{brandingDir}/snippy_config.cson")
     .pipe(gcson())
     .pipe(gulp.dest('./app/brand'))
 
