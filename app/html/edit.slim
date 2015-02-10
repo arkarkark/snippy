@@ -71,19 +71,27 @@ form.form-horizontal [
       input.form-checkbox#promoted type="checkbox" ng-model="editController.snip.promoted"
 
   .form-group
-    .col-sm-8 cg-busy="{promise: editController.busy, message: editController.busyMessage || 'Please wait'}"
+    .col-sm-6 cg-busy="{promise: editController.busy, message: editController.busyMessage || 'Please wait'}"
       label.message
         | {{editController.message}}
 
-    .col-sm-2
-      button.btn.btn-primary [
-        type="submit"
-        ng-bind="!editController.snip.id ? 'Create' : 'Save'"
-      ]
+    .col-sm-6
+      .right
+        button.btn<> [
+          type="button"
+          ng-click="editController.delete(editForm)"
+        ]
+          | Delete
 
-    .col-sm-2
-      button.btn [
-        type="button"
-        ng-click="editController.delete(editForm)"
-      ]
-        | Delete
+        button.btn<> [
+          type="button"
+          ark-download="editController.exportString()"
+          ark-attr-file-name="{{editController.snip.keyword}}.json"
+          ark-attr-mime-type="text/json"
+        ]
+          | Export
+
+        button.btn.btn-primary<> [
+          type="submit"
+          ng-bind="!editController.snip.id ? 'Create' : 'Save'"
+        ]

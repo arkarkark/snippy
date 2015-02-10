@@ -26,7 +26,4 @@
   "resolutions": {
     "angular": ">=1.3.10"
   },
-  "devDependencies": {
-    "URL.js": "*"
-  }
 }

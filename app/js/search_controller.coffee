@@ -35,14 +35,17 @@ angular.module('SnippySearch').controller('SearchController', (
         @snipSelected.splice(index, 1)
     )
 
-  @export = =>
-    # TODO(ark) we have the data just build use URL.createObjectURL and download that
-    params =
-      search: @searchText
-      download: true
-    url = "/admin/api/snip?#{$.param(params)}"
-    $window.open(url, '_self')
-    url # return something that's not $window
+  @exportString = =>
+    selected = _.chain(@snips)
+      .filter((s, index) => @snipSelected[index])
+      .map((s) -> _.omit(s, 'id'))
+      .value()
+    JSON.stringify(selected, null, 2)
+
+  @exportFileName = =>
+    fileName = @searchText || 'all'
+    # TODO(ark) add in if they searched for private/proxy/promoted
+    fileName += '.json'
 
   @search() if @searchText
 

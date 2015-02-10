@@ -3,6 +3,7 @@
 angular.module('SnippySearch', [])
 
 app = angular.module('Snippy', [
+  'Download'
   'Focus'
   'QrCode'
   'SelectAll'

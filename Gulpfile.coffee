@@ -43,7 +43,6 @@ bowerJavaScript = [
   'angular-ui-grid/ui-grid.js'
   'angular-bootstrap/ui-bootstrap-tpls.js'
   'angular-busy/dist/angular-busy.js'
-  'URL.js/dist/URL.js'
 ]
 
 bowerCss = [

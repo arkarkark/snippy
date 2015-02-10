@@ -1,4 +1,4 @@
-form.form-horizontal.explore-save-form [
+form.form-horizontal [
   name="searchForm"
   ng-submit="searchController.search(searchForm)"
   lk-enter="searchController.search(searchForm)"
@@ -24,7 +24,7 @@ hr
   .col-sm-12 cg-busy="{promise: searchController.busy, message: searchController.busyMessage || 'Please wait'}"
 
 
-form.form-horizontal.explore-save-form [
+form.form-horizontal [
   ng-show="searchController.snips.length"
   name="resultsForm"
 ]
@@ -101,18 +101,20 @@ hr
     .col-sm-1
     .col-sm-5
       span.right
-        button.btn.btn-primary> [
-          type="button"
-          ng-disabled="searchController.buttonsEnabled()"
-          ng-click="searchController.update(resultsForm)"
-        ] Update
-        button.btn> [
+        button.btn<> [
           type="button"
           ng-disabled="searchController.buttonsEnabled()"
           ng-click="searchController.delete(resultsForm)"
         ] Delete
-        button.btn.export> [
+        button.btn<> [
           type="button"
           ng-disabled="!searchController.snips.length"
-          ng-click="searchController.export(resultsForm)"
+          ark-download="searchController.exportString()"
+          ark-attr-file-name="{{searchController.exportFileName()}}"
+          ark-attr-mime-type="text/json"
         ] Export
+        button.btn.btn-primary<> [
+          type="button"
+          ng-disabled="searchController.buttonsEnabled()"
+          ng-click="searchController.update(resultsForm)"
+        ] Update

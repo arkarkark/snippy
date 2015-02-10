@@ -67,6 +67,10 @@ angular.module('SnippyEdit', []).controller('EditController', (
   @getUrl = =>
     'http://wtwf.com/' + @snip?.keyword
 
+  @exportString = =>
+    JSON.stringify(_.omit(@snip, 'id') || '', null, 2)
+
+
   # TODO(ark) handle url= being in the $location.search() that means we have a new setting.
 
   @
