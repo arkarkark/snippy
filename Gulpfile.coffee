@@ -4,6 +4,7 @@ coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
 eventStream = require 'event-stream'
 fs = require 'fs'
+gcson = require 'gulp-cson'
 gulp = require 'gulp'
 ngAnnotate = require 'gulp-ng-annotate'
 rename = require 'gulp-rename'
@@ -42,6 +43,7 @@ bowerJavaScript = [
   'angular-ui-grid/ui-grid.js'
   'angular-bootstrap/ui-bootstrap-tpls.js'
   'angular-busy/dist/angular-busy.js'
+  'URL.js/dist/URL.js'
 ]
 
 bowerCss = [
@@ -101,7 +103,8 @@ gulp.task 'brand', ->
     .pipe(gulp.dest('./app/static'))
   gulp.src(brandingDir + '/default.html')
     .pipe(gulp.dest('./app/brand'))
-  gulp.src(brandingDir + '/snippy_config.json')
+  gulp.src(brandingDir + '/snippy_config.cson')
+    .pipe(gcson())
     .pipe(gulp.dest('./app/brand'))
 
 gulp.task 'appyaml', ['brand'], ->
