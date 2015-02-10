@@ -1,5 +1,7 @@
 div ng-show="currentUser.email"
   | {{currentUser.email}}
+  a< target="_self" ng-href="{{currentUser.logout}}"
+    i.fa.fa-sign-out
 
 div ng-hide="currentUser.email"
   a ng-href="{{currentUser.login}}" target="_self" Login

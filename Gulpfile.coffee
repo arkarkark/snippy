@@ -109,10 +109,12 @@ gulp.task 'appyaml', ['brand'], ->
 
 gulp.task 'build', ['coffee', 'slim', 'bower:js', 'css', 'icons', 'brand', 'appyaml']
 
-gulp.task 'watch', ['build'], ->
+gulp.task 'watch', ->
   gulp.watch 'app/js/**/*.coffee', ['coffee']
   gulp.watch 'app/**/*.slim', ['slim']
   gulp.watch 'app/css/**/*.scss', ['css']
   gulp.watch brandingDir + '/**/*', ['brand', 'appyaml']
 
-gulp.task 'default', ['watch']
+gulp.task 'dev', ['build', 'watch']
+
+gulp.task 'default', ['dev']

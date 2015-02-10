@@ -3,7 +3,7 @@
 import json
 import os
 
-class SnippyConfig(Object):
+class SnippyConfig(object):
   """Config file reader for snippy parameters."""
   def __init__(self):
     file_name = os.path.join(os.path.dirname(__file__), 'brand/snippy_config.json')

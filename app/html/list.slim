@@ -1,11 +1,11 @@
-ul
-  li
+ul ng-show="currentUser.can"
+  li ng-show="currentUser.can.editSnips"
     a href="/admin/edit/" Add a snip
-  li
-    a href="/admin/search/" Search
-  li
-    a target="_self" href="/admin/export" Export all snips as JSON
-  li
+  li ng-show="currentUser.can.editSnips"
+    a href="/admin/search/" Search snips
+  li ng-show="currentUser.can.editSnips"
+    a target="_self" href="/admin/api/snip?search=&download=true" Export all snips as JSON
+  li ng-show="currentUser.can.editSnips"
     a href="/admin/import/" Import a JSON file of snips
   li
     a> href="javascript:window.external.AddSearchProvider(window.location.href.split('/').splice(0,3).join('/') + '/admin/suggestxml');"
