@@ -89,18 +89,11 @@ def fixupSuggestReply(url, parts, reply):
     obj[0] = reply_key
     obj[1] = [fixupSuggestReplyEntry(keyword, x) for x in obj[1]]
   else:
-    obj = obj[0]
-    # logging.info('%r', obj)
-    for x in obj:
-      logging.info('%r', x)
-
     # assume result is ['option1', 'option2']
     obj = [reply_key, [fixupSuggestReplyEntry(keyword, x) for x in obj]]
 
   # then reencode it and send it back
-  ans = json.dumps(obj)
-  logging.info('%r', ans)
-  return ans
+  return json.dumps(obj)
 
 def fixupSuggestReplyEntry(keyword, entry):
   if isinstance(entry, basestring):
