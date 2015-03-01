@@ -1,13 +1,19 @@
 # Copyright 2010 Alex K (wtwf.com) All rights reserved.
 
+# useful?
+# http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions/1.0
+# https://developer.mozilla.org/en-US/docs/Supporting_search_suggestions_in_search_plugins
 __author__ = 'wtwf.com (Alex K)'
 
-import urllib
+import collections
+import json
 import logging
 import re
-import json
+import urllib
 
 import google.appengine.api.urlfetch
+
+import jinja2
 
 from wtwf import wtwfhandler
 import model
@@ -23,10 +29,18 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
         if snippy.private:
           self.AssertAllowed()
         parts[1] = parts[1].decode('utf-8')
-        # TODO(ark): do we want to support {searchTerms} as well as %s?
-        url = snippy.suggest_url.replace('%s', urllib.quote(parts[1]))
+        url = snippy.suggest_url
+        if '%s' in url:
+          url = snippy.suggest_url.replace('%s', urllib.quote(parts[1]))
+        elif '{{' in url:
+          url = str(jinja2.Template(url).render({
+            'searchTerms': urllib.quote(parts[1])
+          }))
+        elif '{searchTerms}' in url:
+          url = snippy.suggest_url.replace('{searchTerms}', urllib.quote(parts[1]))
         res = google.appengine.api.urlfetch.fetch(url)
         reply = fixupSuggestReply(url, parts, res.content)
+        self.response.headers['Content-Type'] = 'application/x-suggestions+json'
         self.response.out.write(reply)
 
 
@@ -39,8 +53,7 @@ class SuggestXmlHandler(wtwfhandler.WtwfHandler):
       'description': config.get('description', 'description'),
       'developer': config.get('developer', 'developer'),
     }
-    xmltype = 'application/opensearchdescription+xml'
-    self.response.headers['Content-Type'] = xmltype
+    self.response.headers['Content-Type'] = 'application/opensearchdescription+xml'
     self.SendTemplate('opensearch.xml', template_values)
 
 def fixupGoogles(keyword, reply_key, reply):
@@ -51,10 +64,23 @@ def fixupGoogles(keyword, reply_key, reply):
   choices = ['%s %s' % (keyword, x) for x in choices if isinstance(x, (str, unicode)) and x[-1] != '=']
   return json.dumps([reply_key, choices])
 
+def fixupImdb(keyword, reply_key, reply):
+  obj = json.loads(getJson(reply))
+  prefixes = collections.defaultdict(lambda: 'title')
+  prefixes.update({'tt': 'title', 'nm': 'name'})
+  # I wish chrome understood the last 3 elements of this array.
+  obj = [reply_key,
+    ['%s %s' % (keyword, x[u'l']) for x in obj],
+    [x[u'l'] for x in obj],
+    ['http://imdb.com/%s/%s' % (prefixes[x[u'id'][0:2]], x[u'id']) for x in obj],
+  ]
+  return json.dumps(obj)
+
 
 JSONP_START_RE = re.compile(r'^[a-zA-Z0-9_.]+\(', re.MULTILINE)
 FIXUP_MAP = {
-  r'^https://www\.google\.com/s\?tbm=': fixupGoogles
+  r'^https://www\.google\.com/s\?tbm=': fixupGoogles,
+  r'^http://sg\.media-imdb\.com/suggests': fixupImdb,
 }
 
 def getJson(s):

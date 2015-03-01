@@ -7,7 +7,6 @@ import logging
 import os
 
 from google.appengine.api import users
-from google.appengine.ext.webapp import template
 
 import jinja2
 
