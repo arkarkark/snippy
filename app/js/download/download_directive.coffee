@@ -1,5 +1,6 @@
 # ark-download
-angular.module('Download', []).directive('arkDownload', ->
+# make an element download a file containing the value of an angular expression when you click on it.
+angular.module('ArkDownload', []).directive('arkDownload', ->
   restrict: 'A'
   scope:
     value: '&arkDownload'

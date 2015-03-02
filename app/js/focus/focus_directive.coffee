@@ -2,7 +2,7 @@
 # alternatively set ark-focus="somePromise" and when the promise is done select everything.
 # ark-focus can be an array of promises and boolean values and we'll focus when they're ALL resolved/true
 # e.g. ark-focus="[somePromise, thing.visible]"
-angular.module('Focus', []).directive('arkFocus', ($q, $timeout) ->
+angular.module('ArkFocus', []).directive('arkFocus', ($q, $timeout) ->
   priority: 2
   scope:
     'arkFocus': '&arkFocus'

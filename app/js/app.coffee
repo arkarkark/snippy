@@ -1,12 +1,11 @@
-# Hello world
-#
 angular.module('SnippySearch', [])
 
 app = angular.module('Snippy', [
-  'Download'
-  'Focus'
+  'ArkDownload'
+  'ArkFocus'
+  'ArkKeyBroadcast'
+  'ArkSelectAll'
   'QrCode'
-  'SelectAll'
   'SnippyEdit'
   'SnippySearch'
   'cgBusy'

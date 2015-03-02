@@ -1,5 +1,5 @@
 angular.module('SnippyEdit', []).controller('EditController', (
-  $location, $scope, $timeout, Snip, QrService) ->
+  $location, $scope, $timeout, $window, Snip, QrService, SnippyConfig) ->
   @qrSettings = =>
     QrService.settings(@getUrl())
 
@@ -9,11 +9,16 @@ angular.module('SnippyEdit', []).controller('EditController', (
     @original = angular.copy(@snip)
   )
 
+  @config = SnippyConfig.get()
+
   @keywordChanged = =>
     $location.search('keyword', @snip.keyword)
 
-  @snipUrl = =>
-    if @snip.keyword then "#{$location.absUrl().split('/').splice(0,3).join('/')}/#{@snip.keyword}" else ''
+  @getBaseUrl = =>
+    @config.baseUrl || "#{$location.absUrl().split('/').splice(0,3).join('/')}/"
+
+  @getUrl = =>
+    if @snip?.keyword then @getBaseUrl() + @snip?.keyword else ''
 
   @swapUrlAltUrl = =>
     [@snip.url, @snip.alt_url] = [@snip.alt_url, @snip.url]
@@ -64,14 +69,10 @@ angular.module('SnippyEdit', []).controller('EditController', (
     if confirm("Are you sure you want to delete '#{@snip.keyword}'?")
       @snip.$delete(=> delete @snip.id)
 
-  @getUrl = =>
-    'http://wtwf.com/' + @snip?.keyword
-
   @exportString = =>
     JSON.stringify(_.omit(@snip, 'id') || '', null, 2)
 
-
-  # TODO(ark) handle url= being in the $location.search() that means we have a new setting.
+  $scope.$on('arkOpenUrl', => $window.open("#{@getBaseUrl()}/r/#{encodeURIComponent(@getUrl())}", '_self'))
 
   @
 )

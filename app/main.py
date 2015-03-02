@@ -14,9 +14,11 @@ import suggest
 import import_snips
 import user
 import model
+import snippy_config_handler
 from lib.crud import crud_handler
 
 app = webapp.WSGIApplication([
+  ('/admin/api/snippyconfig.*', snippy_config_handler.SnippyConfigHandler),
   ('/admin/api/snip.*', crud_handler.GetCrudHandler(model.Snippy)),
   ('/admin/api/import', import_snips.ImportHandler),
   ('/admin/api/user', user.UserHandler),

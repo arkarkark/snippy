@@ -55,7 +55,6 @@ class WtwfHandler(webapp.RequestHandler):
     us = urlparse.urlsplit(self.request.url)
     return us.scheme + '://' + us.netloc
 
-
   def IsMobile(self):
     # more info at http://www.zytrax.com/tech/web/mobile_ids.html
     ua = self.request.headers['USER_AGENT']

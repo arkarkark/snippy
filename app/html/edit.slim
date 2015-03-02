@@ -19,8 +19,10 @@ form.form-horizontal [
     .col-sm-6
       input.form-control#keyword [
         ark-select-all
+        onkeydown="return (event.keyCode!=13);"
         ark-focus="editController.snip.id"
-        value="{{editController.snipUrl()}}"
+        ark-key-broadcast="{'mod-return': 'arkOpenUrl', 'return': 'arkOpenUrl'}"
+        value="{{editController.getUrl()}}"
       ]
 
   .form-group
@@ -51,7 +53,7 @@ form.form-horizontal [
     .col-sm-2
       input.form-checkbox#private type="checkbox" ng-model="editController.snip.private"
     .col-sm-8
-      a ng-href="{{editController.snipUrl()}}" target="_self"
+      a ng-href="{{editController.getUrl()}}" target="_self"
         qrcode.qr [
           ng-show="editController.snip.keyword"
           size="110"
