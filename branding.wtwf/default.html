@@ -1,29 +1,33 @@
-<html><head><title>wtwf.com</title></head>
-<body>
-<h1 align=center><u>Whiskey</u> <u>Tango<br>Whiskey</u> <u>Foxtrot</u></h1>
+<!DOCTYPE HTML>
+<html ng-app="Wtwf">
+  <head>
+    <title>wtwf.com</title>
+    <script src="static/js/vendor.js"></script>
+    <script src="static/wtwf.js"></script>
+  </head>
+  <body ng-controller="MainController as mainController">
+    <h1 align=center><u>Whiskey</u> <u>Tango<br>Whiskey</u> <u>Foxtrot</u></h1>
 
-<hr>
-<div align=center><a href="http://acronyms.thefreedictionary.com/WTWF">Wait, That Wasn't Funny</a><br>or perhaps <a href="http://www.urbandictionary.com/define.php?term=wtwf">this</a>.</div>
-
-   <br clear="all" /><hr />
-
-  <p align=center>
-
-All Original Content &copy;1995-2011
-
-<a href="http://wtwf.com/">ark</a>
-<a href="#" id="notify_us">Email me</a>
+    <div ng-if="mainController.searchUrl">
+      <iframe id="if1" width="100%" height="254" style="visibility:visible" ng-src="{{mainController.searchUrl}}"></iframe>
+    </div>
 
 
-<script type="text/javascript">
-function fixuppage() {
-  var d = String.fromCharCode('64') + location.hostname.substring(4);
-  document.getElementById('notify_us').href = 'mailto:' + 'web2' + d;
-}
-fixuppage();
-</script>
-</p>
+    <hr>
+    <div align=center><a href="http://acronyms.thefreedictionary.com/WTWF">Wait, That Wasn't Funny</a><br>or perhaps <a href="http://www.urbandictionary.com/define.php?term=wtwf">this</a>.</div>
 
-  </p>
+    <br clear="all" /><hr />
 
-</body></html>
+    <p align=center>
+
+      All Original Content &copy;1995-2011
+
+      <a href="http://wtwf.com/">ark</a>
+      <a ng-href="{{mainController.email}}">Email me</a>
+
+
+      <script type="text/javascript">
+      </script>
+    </p>
+  </body>
+</html>

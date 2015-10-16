@@ -17,7 +17,7 @@ setup:
 
 install:
 	./node_modules/gulp/bin/gulp.js build
-	(cd app; appcfg.py --oauth2 update .)
+	(cd app; appcfg.py update .)
 
 test:
 	for fil in app/*_test.py; do $$fil; done
