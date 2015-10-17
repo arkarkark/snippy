@@ -7,7 +7,6 @@ import model
 import urllib
 import logging
 
-from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import urlfetch_errors
 
@@ -19,23 +18,13 @@ class AddHandler(wtwfhandler.WtwfHandler):
   def get(self, path):
     self.AssertAllowed()
 
-    params = {}
-
-    user = users.get_current_user()
-    template_values = {'host': self.GetBaseUrl()}
-    message = None
-
-    path_info = urllib.unquote(path)
-    parts = path_info.split(' ', 1)
+    parts = path.split(' ', 1)
 
     if len(parts) == 1:
       parts = [model.NewRandomId(), parts[0]]
 
     url = None
     kw = None
-    alt_url = None
-    mobile_url = None
-    suggest_url = None
 
     if len(parts) == 2 and parts[1]:
       if not parts[1].startswith('http'):
@@ -55,13 +44,12 @@ class AddHandler(wtwfhandler.WtwfHandler):
       if self.request.query_string:
         url += '?' + self.request.query_string
 
-    # TODO(ark) get it from request args
+    # get it from request args
     if not kw:
       kw = self.request.get('keyword')
       url = self.request.get('url')
-      alt_url = self.request.get('alt_url')
-      mobile_url = self.request.get('mobile_url')
-      suggest_url = self.request.get('suggest_url')
+
+    params = {}
 
     if kw and url:
       orig = model.GetByKeyword(kw)
