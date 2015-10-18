@@ -29,7 +29,16 @@ form.form-horizontal [
     label.col-sm-2.control-label for="url" Url
     .col-sm-10
       input.form-control#url ng-model="editController.snip.url"
-    .swap ng-click="editController.swapUrlAltUrl()"
+    .restore [
+      ng-click="editController.restoreOldUrl()"
+      ng-show="editController.oldUrl"
+      title="Restore old url: {{editController.oldUrl}}"
+    ]
+      .fa.fa-refresh
+    .swap [
+      ng-click="editController.swapUrlAltUrl()"
+      title="Swap Url and Alt Url"
+    ]
       .fa.fa-arrow-up
       .fa.fa-arrow-down
 

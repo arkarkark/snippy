@@ -161,6 +161,13 @@ table.search-results {
   @include user-select(none);
 }
 
+.restore {
+  position: absolute;
+  right: 60px;
+  top: 82px;
+  @include user-select(none);
+}
+
 .message {
   float: right;
   padding-top: 7px;

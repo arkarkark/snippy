@@ -1,5 +1,12 @@
 angular.module('SnippyEdit', []).controller('EditController', (
-  $location, $scope, $timeout, $window, Snip, QrService, SnippyConfig) ->
+  $location
+  $scope
+  $timeout
+  $window
+  Snip
+  QrService
+  SnippyConfig
+) ->
   @qrSettings = =>
     QrService.settings(@getUrl())
 
@@ -7,6 +14,11 @@ angular.module('SnippyEdit', []).controller('EditController', (
   @snip = Snip.query({keyword: @originalKeyword}, (snips) =>
     @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: ''})
     @original = angular.copy(@snip)
+    newUrl = $location.search().url
+    if newUrl && @original.url
+      @snip.url = newUrl
+      @oldUrl = @original.url
+      @message = "A snip with that name already exists. Click Save to update with this new url."
   )
 
   @config = SnippyConfig.get()
@@ -19,6 +31,9 @@ angular.module('SnippyEdit', []).controller('EditController', (
 
   @getUrl = =>
     if @snip?.keyword then @getBaseUrl() + @snip?.keyword else ''
+
+  @restoreOldUrl = =>
+    [@snip.url, @oldUrl] = [@oldUrl, @snip.url]
 
   @swapUrlAltUrl = =>
     [@snip.url, @snip.alt_url] = [@snip.alt_url, @snip.url]
