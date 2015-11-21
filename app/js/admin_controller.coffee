@@ -7,22 +7,21 @@ app = angular.module("SnippyAdminController", []).controller("AdminController", 
     @domain = config.baseUrl.split("/")[2]
   )
 
-  @addWellKnown = (fact) ->
-    console.log("Adding well known fact:", fact)
+  @addWellKnown = (fact) =>
     return unless fact
+    @lastAddedFact = ""
     @busy = $http.post("/admin/api/wellknown", fact: fact)
-      .then((data) ->
-        console.log("success:", data)
+    @busy.then((data) =>
+        @lastAddedFact = fact
       ).catch((data) ->
-        console.log("error:", data)
+        alert("That didn't work!", data)
+        console.error("error:", data)
       )
-
     @busyMessage = "Saving Fact"
     @message = "done saving fact"
 
   @testWellKnown = (fact) ->
     url = fact.split(".")[0]
-    console.log(url)
     $window.open("/.well-known/acme-challenge/#{url}", "_blank")
     true # so we don't return a window
 

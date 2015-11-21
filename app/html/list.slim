@@ -1,8 +1,6 @@
 .row
   .form-group
     .col-sm-12 cg-busy="{promise: adminController.busy, message: adminController.busyMessage}"
-      label.message
-        | {{adminController.message}}
 
 ul ng-show="currentUser.can"
   li ng-show="currentUser.can.editSnips"
@@ -28,8 +26,11 @@ ul ng-show="currentUser.can"
           ng-model="wellKnownFact"
         ]
       button.btn.btn-primary<> ng-click="adminController.addWellKnown(wellKnownFact)" Add
-      button.btn.btn-default<> ng-click="adminController.testWellKnown(wellKnownFact)" test
-      button.btn.btn-info<> ng-click="adminController.showFactsHelp = !adminController.showFactsHelp" help
+      button.btn.btn-info<> ng-click="adminController.showFactsHelp = !adminController.showFactsHelp" Help
+      button.btn.btn-default<> [
+        ng-show="wellKnownFact && wellKnownFact == adminController.lastAddedFact"
+        ng-click="adminController.testWellKnown(wellKnownFact)"
+      ] Test
     div ng-show="adminController.showFactsHelp"
       .row
         .col-sm-12

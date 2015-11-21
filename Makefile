@@ -1,9 +1,8 @@
 dev:
-	./node_modules/gulp/bin/gulp.js &
+	./node_modules/.bin/gulp &
 	(cd app; dev_appserver.py --host=0.0.0.0 --port 6723 .)
 
 setup:
-	bundle install
 	npm install
 	bower install
 	mkdir -p vendor
@@ -16,7 +15,7 @@ setup:
 	(cd app; ln -s -f ../vendor/bouncer/bouncer bouncer)
 
 install:
-	./node_modules/gulp/bin/gulp.js build
+	./node_modules/.bin/gulp build
 	(cd app; appcfg.py update .)
 
 test:
