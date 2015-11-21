@@ -1,10 +1,10 @@
-autoprefixer = require "gulp-autoprefixer"
 cached = require "gulp-cached"
 coffee = require "gulp-coffee"
 concat = require "gulp-concat"
 eventStream = require "event-stream"
 fs = require "fs"
 gcson = require "gulp-cson"
+glob = require "glob"
 gulp = require "gulp"
 gutil = require "gulp-util"
 ignore = require "gulp-ignore"
@@ -65,48 +65,52 @@ srcFromString = (filename, string) ->
 gulp.task "bower:js", ->
   gulp.src(("bower_components/#{fname}" for fname in bowerJavaScript))
     .pipe(concat("vendor.js").on("error", swallowError))
-    .pipe(gulp.dest("app/static/js"))
+    .pipe(gulp.dest("app/static"))
 
 # If you uglify this you need to make it angular dependency injection aware
 gulp.task "coffee", ->
-  gulp.src(("app/js/**/*.coffee"))
+  gulp.src([
+    "client/app.coffee"
+    "client/*_module.coffee"
+    "client/**/*.coffee"
+    ])
     .pipe(sourcemaps.init())
     .pipe(coffee().on("error", swallowError))
     .pipe(ngAnnotate())
     .pipe(concat("app.js").on("error", swallowError))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest("app/static/js"))
+    .pipe(gulp.dest("app/static"))
 
 gulp.task "slim", ->
-  gulp.src(("app/**/*.slim"))
+  gulp.src(("client/**/*.slim"))
     .pipe(cached("slim"))
-    .pipe(rename((path) ->
-      path.dirname = path.dirname.replace(/^(html|js)(\/|$)/, "")
-      path
-    ))
     .pipe(slm({})).on("error", swallowError)
-    .pipe(gulp.dest("app/static/html"))
+    .pipe(gulp.dest("app/static"))
 
 gulp.task "icons", ->
   gulp.src("bower_components/fontawesome/fonts/**.*")
-    .pipe(gulp.dest("./app/static/fonts"))
+    .pipe(gulp.dest("./app/static"))
 
 gulp.task "css", ->
   bowerFiles = gulp.src(("bower_components/#{fname}" for fname in bowerCss))
 
-  sassFiles = srcFromString("snip.scss", """
+  vendorSass = """
     @import "bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap-sprockets";
     @import "bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap";
+    $fa-font-path: ".";
     @import "bower_components/fontawesome/scss/font-awesome";
+  """
+  clientSass = glob.sync("client/**/*.scss")
 
-    @import "app/css/snip";
-    """)
+
+  sassFiles = srcFromString("snip.scss", vendorSass + clientSass.map((fileName) ->
+    """@import "#{fileName[0..-6]}";""").join("\n"))
     .pipe(sass()).on("error", swallowError)
     .pipe(sourcemaps.write())
 
   eventStream.concat(bowerFiles, sassFiles)
       .pipe(concat("snip.css"))
-      .pipe(gulp.dest("app/static/css"))
+      .pipe(gulp.dest("app/static"))
 
 gulp.task "brand", ->
   gulp.src("#{brandingDir}/static/**")
@@ -124,9 +128,9 @@ gulp.task "appyaml", ["brand"], ->
 gulp.task "build", ["coffee", "slim", "bower:js", "css", "icons", "brand", "appyaml"]
 
 gulp.task "watch", ->
-  gulp.watch "app/js/**/*.coffee", ["coffee"]
-  gulp.watch "app/**/*.slim", ["slim"]
-  gulp.watch "app/css/**/*.scss", ["css"]
+  gulp.watch "client/**/*.coffee", ["coffee"]
+  gulp.watch "client/**/*.slim", ["slim"]
+  gulp.watch "client/**/*.scss", ["css"]
   gulp.watch brandingDir + "/**/*", ["brand", "appyaml"]
 
 gulp.task "dev", ["build", "watch"]

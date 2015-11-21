@@ -20,21 +20,21 @@ app = angular.module("Snippy", [
 
   $stateProvider.state("home",
     url: "/admin/"
-    templateUrl: "/static/html/list.html"
+    templateUrl: "/static/admin/list.html"
     controller: "AdminController as adminController"
   ).state("Edit",
     url: "/admin/edit/"
-    templateUrl: "/static/html/edit.html"
+    templateUrl: "/static/admin/edit/edit.html"
     controller: "EditController as editController"
     reloadOnSearch: false
   ).state("Search",
     url: "/admin/search/"
-    templateUrl: "/static/html/search.html"
+    templateUrl: "/static/admin/search/search.html"
     controller: "SearchController as searchController"
     reloadOnSearch: false
   ).state("Import",
     url: "/admin/import/"
-    templateUrl: "/static/html/import.html"
+    templateUrl: "/static/admin/import/import.html"
   )
 ).run(($rootScope, $state, $stateParams) ->
   $rootScope.$state = $state
