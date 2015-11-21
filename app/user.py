@@ -11,6 +11,7 @@ from google.appengine.ext import webapp
 from lib.crud import crud_handler
 
 import model
+import well_known
 
 import bouncer
 import bouncer.constants as bc
@@ -36,7 +37,7 @@ class UserHandler(webapp.RequestHandler):
         'federated_provider': user.federated_provider(),
         'can': {
           'editSnips': bouncer.can(user, bc.EDIT, model.Snippy),
-          'editWellKnown': bouncer.can(user, bc.EDIT, model.WellKnown),
+          'editWellKnown': bouncer.can(user, bc.EDIT, well_known.WellKnown),
         },
         'logout': users.create_logout_url(url),
         'admin': users.is_current_user_admin(),
