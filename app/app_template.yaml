@@ -15,9 +15,9 @@ skip_files:
 - .*\.pyc$
 
 handlers:
-- url: /static/fonts/(.*\.woff2)
-  static_files: static/fonts/\1
-  upload: static/fonts/(.*\.woff2)
+- url: /static/(.*\.woff2)
+  static_files: static/\1
+  upload: static/(.*\.woff2)
   mime_type: font/woff2
 
 - url: /static

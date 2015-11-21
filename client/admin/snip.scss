@@ -154,14 +154,14 @@ table.search-results {
   position: absolute;
   right: 20px;
   top: 82px;
-  @include user-select(none);
+  user-select: none;
 }
 
 .restore {
   position: absolute;
   right: 60px;
   top: 82px;
-  @include user-select(none);
+  user-select: none;
 }
 
 .message {

@@ -6,7 +6,6 @@ app/bouncer
 app/brand
 app/dateutil
 app/static
-bower_components
 branding
 node_modules
 vendor

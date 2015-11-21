@@ -32,7 +32,7 @@ try
   brandingDir ?= fs.readFileSync("branding").toString()
 brandingDir ?= "branding.wtwf"
 
-bowerJavaScript = [
+nodeJavaScript = [
   "underscore/underscore.js"
   "jquery/dist/jquery.js"
   "bootstrap/dist/js/bootstrap.js"
@@ -40,14 +40,16 @@ bowerJavaScript = [
   "angular-resource/angular-resource.js"
   "ui-router/release/angular-ui-router.js"
   "qrcode-generator/js/qrcode.js"
-  "angular-qrcode/qrcode.js"
+  "angular-qrcode/angular-qrcode.js"
   "angular-ui-grid/ui-grid.js"
   "angular-bootstrap/ui-bootstrap-tpls.js"
-  "angular-busy/dist/angular-busy.js"
+  "angular-busy2/dist/angular-busy.js"
 ]
 
-bowerCss = [
+nodeCss = [
   "angular-busy/dist/angular-busy.css"
+  "bootstrap/dist/css/bootstrap.css"
+  "bootstrap/dist/css/bootstrap-theme.css"
 ]
 
 swallowError = (err) ->
@@ -62,8 +64,8 @@ srcFromString = (filename, string) ->
     this.push(null)
   src
 
-gulp.task "bower:js", ->
-  gulp.src(("bower_components/#{fname}" for fname in bowerJavaScript))
+gulp.task "node:js", ->
+  gulp.src(("node_modules/#{fname}" for fname in nodeJavaScript))
     .pipe(concat("vendor.js").on("error", swallowError))
     .pipe(gulp.dest("app/static"))
 
@@ -88,27 +90,24 @@ gulp.task "slim", ->
     .pipe(gulp.dest("app/static"))
 
 gulp.task "icons", ->
-  gulp.src("bower_components/fontawesome/fonts/**.*")
+  gulp.src("node_modules/font-awesome/fonts/**.*")
     .pipe(gulp.dest("./app/static"))
 
 gulp.task "css", ->
-  bowerFiles = gulp.src(("bower_components/#{fname}" for fname in bowerCss))
+  nodeFiles = gulp.src(("node_modules/#{fname}" for fname in nodeCss))
 
   vendorSass = """
-    @import "bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap-sprockets";
-    @import "bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap";
     $fa-font-path: ".";
-    @import "bower_components/fontawesome/scss/font-awesome";
+    @import "node_modules/font-awesome/scss/font-awesome";
   """
-  clientSass = glob.sync("client/**/*.scss")
+  clientSass = glob.sync("client/**/*.scss").map((fileName) ->
+    """@import "#{fileName[0..-6]}";""").join("\n")
 
-
-  sassFiles = srcFromString("snip.scss", vendorSass + clientSass.map((fileName) ->
-    """@import "#{fileName[0..-6]}";""").join("\n"))
+  sassFiles = srcFromString("snip.scss", vendorSass + clientSass)
     .pipe(sass()).on("error", swallowError)
     .pipe(sourcemaps.write())
 
-  eventStream.concat(bowerFiles, sassFiles)
+  eventStream.concat(nodeFiles, sassFiles)
       .pipe(concat("snip.css"))
       .pipe(gulp.dest("app/static"))
 
@@ -125,7 +124,7 @@ gulp.task "brand", ->
 gulp.task "appyaml", ["brand"], ->
   run("./app/make_app.yaml.py").exec()
 
-gulp.task "build", ["coffee", "slim", "bower:js", "css", "icons", "brand", "appyaml"]
+gulp.task "build", ["coffee", "slim", "node:js", "css", "icons", "brand", "appyaml"]
 
 gulp.task "watch", ->
   gulp.watch "client/**/*.coffee", ["coffee"]
