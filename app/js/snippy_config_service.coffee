@@ -1,3 +1,3 @@
-angular.module('Snippy').factory('SnippyConfig', ($resource) ->
-  new $resource('/admin/api/snippyconfig/')
+angular.module("Snippy").factory("SnippyConfig", ($resource) ->
+  new $resource("/admin/api/snippyconfig/")
 )

@@ -1,4 +1,4 @@
-angular.module('SnippyEdit', []).controller('EditController', (
+angular.module("SnippyEdit", []).controller("EditController", (
   $location
   $scope
   $timeout
@@ -10,9 +10,9 @@ angular.module('SnippyEdit', []).controller('EditController', (
   @qrSettings = =>
     QrService.settings(@getUrl())
 
-  @originalKeyword = $location.search().keyword || ''
+  @originalKeyword = $location.search().keyword || ""
   @snip = Snip.query({keyword: @originalKeyword}, (snips) =>
-    @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: ''})
+    @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: ""})
     @original = angular.copy(@snip)
     newUrl = $location.search().url
     if newUrl && @original.url
@@ -24,13 +24,13 @@ angular.module('SnippyEdit', []).controller('EditController', (
   @config = SnippyConfig.get()
 
   @keywordChanged = =>
-    $location.search('keyword', @snip.keyword)
+    $location.search("keyword", @snip.keyword)
 
   @getBaseUrl = =>
-    @config.baseUrl || "#{$location.absUrl().split('/').splice(0,3).join('/')}/"
+    @config.baseUrl || "#{$location.absUrl().split("/").splice(0,3).join("/")}/"
 
   @getUrl = =>
-    if @snip?.keyword then @getBaseUrl() + @snip?.keyword else ''
+    if @snip?.keyword then @getBaseUrl() + @snip?.keyword else ""
 
   @restoreOldUrl = =>
     [@snip.url, @oldUrl] = [@oldUrl, @snip.url]
@@ -52,42 +52,42 @@ angular.module('SnippyEdit', []).controller('EditController', (
         if snips.length
           if confirm("'#{@snip.keyword}' snip exists! Do you want to overwrite it?")
             @snip.id = snips[0].id
-            @busyMessage = 'Saving'
+            @busyMessage = "Saving"
             @busy = @snip.$save()
-            @busy.then(=> @setMessage('Overwritten'))
+            @busy.then(=> @setMessage("Overwritten"))
           else
             @busy = null
         else
-          @busyMessage = 'Saving'
+          @busyMessage = "Saving"
           @busy = @snip.$save()
-          @busy.then(=> @setMessage(if ans then 'Renamed' else 'Created'))
+          @busy.then(=> @setMessage(if ans then "Renamed" else "Created"))
         @busy?.then(=>
           @originalKeyword = @snip.keyword
           @original = angular.copy(@snip)
         )
       )
     else
-      @busyMessage = 'Saving'
+      @busyMessage = "Saving"
       @busy = @snip.$save()
-      @busy.then(=> @setMessage('Saved'))
+      @busy.then(=> @setMessage("Saved"))
 
   @setMessage = (msg) =>
     @message = msg
     console.info(msg)
     $timeout(
-      => @message = ''
+      => @message = ""
       1000
     )
 
   @delete = (form) =>
-    console.log('delete', form)
+    console.log("delete", form)
     if confirm("Are you sure you want to delete '#{@snip.keyword}'?")
       @snip.$delete(=> delete @snip.id)
 
   @exportString = =>
-    JSON.stringify(_.omit(@snip, 'id') || '', null, 2)
+    JSON.stringify(_.omit(@snip, "id") || "", null, 2)
 
-  $scope.$on('arkOpenUrl', => $window.open("#{@getBaseUrl()}/r/#{encodeURIComponent(@getUrl())}", '_self'))
+  $scope.$on("arkOpenUrl", => $window.open("#{@getBaseUrl()}/r/#{encodeURIComponent(@getUrl())}", "_self"))
 
   @
 )

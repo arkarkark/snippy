@@ -1,3 +1,3 @@
-angular.module('Snippy').factory('User', ($resource) ->
-  new $resource('/admin/api/user')
+angular.module("Snippy").factory("User", ($resource) ->
+  new $resource("/admin/api/user")
 )

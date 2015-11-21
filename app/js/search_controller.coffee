@@ -1,4 +1,4 @@
-angular.module('SnippySearch').controller('SearchController', (
+angular.module("SnippySearch").controller("SearchController", (
   $location, $q, $scope, $window, Snip) ->
 
   @snips = []
@@ -7,16 +7,16 @@ angular.module('SnippySearch').controller('SearchController', (
   @searchText = $location.search().for
 
   @searchChanged = =>
-    $location.search('for', @searchText)
+    $location.search("for", @searchText)
 
   @search = ->
     # TODO(ark) indicate search is happening
     @snips = Snip.query({search: @searchText})
     @busy = @snips.$promise
-    @busyMessage = 'Searching'
+    @busyMessage = "Searching"
 
   @update = ->
-    console.log('update')
+    console.log("update")
 
   @delete = (resultsForm) =>
     promises = []
@@ -24,7 +24,7 @@ angular.module('SnippySearch').controller('SearchController', (
       if selected
         promises.push(deleteSnip(@snips[index]))
     @busy = $q.all(promises).then(=> @allSelected = false)
-    @busyMessage = 'Deleting'
+    @busyMessage = "Deleting"
 
   deleteSnip = (snipToDelete) =>
     snipToDelete.$delete(=>
@@ -38,14 +38,14 @@ angular.module('SnippySearch').controller('SearchController', (
   @exportString = =>
     selected = _.chain(@snips)
       .filter((s, index) => @snipSelected[index])
-      .map((s) -> _.omit(s, 'id'))
+      .map((s) -> _.omit(s, "id"))
       .value()
     JSON.stringify(selected, null, 2)
 
   @exportFileName = =>
-    fileName = @searchText || 'all'
+    fileName = @searchText || "all"
     # TODO(ark) add in if they searched for private/proxy/promoted
-    fileName += '.json'
+    fileName += ".json"
 
   @search() if @searchText
 
