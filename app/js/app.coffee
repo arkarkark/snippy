@@ -6,6 +6,7 @@ app = angular.module('Snippy', [
   'ArkKeyBroadcast'
   'ArkSelectAll'
   'QrCode'
+  'SnippyAdminController'
   'SnippyEdit'
   'SnippySearch'
   'cgBusy'
@@ -20,6 +21,7 @@ app = angular.module('Snippy', [
   $stateProvider.state('home',
     url: '/admin/'
     templateUrl: '/static/html/list.html'
+    controller: "AdminController as adminController"
   ).state('Edit',
     url: '/admin/edit/'
     templateUrl: '/static/html/edit.html'

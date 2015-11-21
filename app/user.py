@@ -36,6 +36,7 @@ class UserHandler(webapp.RequestHandler):
         'federated_provider': user.federated_provider(),
         'can': {
           'editSnips': bouncer.can(user, bc.EDIT, model.Snippy),
+          'editWellKnown': bouncer.can(user, bc.EDIT, model.WellKnown),
         },
         'logout': users.create_logout_url(url),
         'admin': users.is_current_user_admin(),

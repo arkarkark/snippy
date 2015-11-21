@@ -1,3 +1,9 @@
+.row
+  .form-group
+    .col-sm-12 cg-busy="{promise: adminController.busy, message: adminController.busyMessage}"
+      label.message
+        | {{adminController.message}}
+
 ul ng-show="currentUser.can"
   li ng-show="currentUser.can.editSnips"
     a href="/admin/edit/" Add a snip
@@ -13,3 +19,31 @@ ul ng-show="currentUser.can"
     | (xml
     a< target="_self" href="/admin/suggestxml" here
     | )
+  li ng-show="currentUser.can.editWellKnown"
+    .form-inline
+      .form-group
+        input.form-control<> [
+          placeholder="Add Well Known things for letsencrypt"
+          size=60
+          ng-model="wellKnownFact"
+        ]
+      button.btn.btn-primary<> ng-click="adminController.addWellKnown(wellKnownFact)" Add
+      button.btn.btn-default<> ng-click="adminController.testWellKnown(wellKnownFact)" test
+      button.btn.btn-info<> ng-click="adminController.showFactsHelp = !adminController.showFactsHelp" help
+    div ng-show="adminController.showFactsHelp"
+      .row
+        .col-sm-12
+          h1 Let's Encrypt!
+
+      .row
+        .col-sm-12
+          pre
+            | openssl req -newkey rsa:2048 -keyout {{adminController.domain}}.private.key -nodes -sha512 -subj \
+              "/CN=example.com" -reqexts SAN -out {{adminController.domain}}.csr.der -outform der -config \
+              <(cat /System/Library/OpenSSL/openssl.cnf \
+              <(printf "[SAN]\nsubjectAltName=DNS:{{adminController.domain}},DNS:www.{{adminController.domain}}"))
+
+      .row
+        .col-sm-12
+          pre
+            | ./letsencrypt-auto certonly -a manual --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview --csr {{adminController.domain}}.csr.der

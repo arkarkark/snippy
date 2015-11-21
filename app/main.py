@@ -1,5 +1,7 @@
 # Copyright 2009 Alex K (wtwf.com) All rights reserved.
 
+"""Snippy a short url app engine thing (and more!)."""
+
 __author__ = 'wtwf.com (Alex K)'
 
 # If you want to check this with pychecker on osx you can do this...
@@ -8,13 +10,14 @@ __author__ = 'wtwf.com (Alex K)'
 from google.appengine.ext import webapp
 
 import add
-import lookup
-import redirectproxy
-import suggest
 import import_snips
-import user
+import lookup
 import model
+import redirectproxy
 import snippy_config_handler
+import suggest
+import user
+import well_known
 from lib.crud import crud_handler
 
 app = webapp.WSGIApplication([
@@ -25,6 +28,8 @@ app = webapp.WSGIApplication([
   ('/admin/add/(.*)', add.AddHandler),
   ('/admin/suggestxml', suggest.SuggestXmlHandler),
   ('/admin/suggest.*', suggest.SuggestHandler),
+  ('/admin/api/wellknown.*', well_known.WellKnownAdminHandler),
+  ('/.well-known/acme-challenge/(.*)', well_known.WellKnownPublicHandler),
   ('/r/(.*)', redirectproxy.RedirectProxyHandler),
   ('/((.|\n)*)', lookup.SnippyHandler),
 ])
