@@ -33,20 +33,12 @@ class WtwfHandler(webapp.RequestHandler):
     # TODO(ark) check for XSRF CSRF?
 
   def TemplateFilename(self, name):
-    ans = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                        'html', name)
-    logging.info("path is %r", ans)
-    return ans
+    return os.path.join(os.path.dirname(os.path.dirname(__file__)), 'html', name)
 
   def TemplateContents(self, name, values=None):
     if values is None:
       values = {}
     path = self.TemplateFilename(name)
-    if not os.path.exists(path):
-      logging.error("path does not exist %r", path)
-    else:
-      logging.info("PATH DOES EXIST!")
-
     return template.render(path, values)
 
   def SendTemplate(self, name, values=None):
