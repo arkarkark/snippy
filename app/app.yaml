@@ -46,6 +46,8 @@ handlers:
 - url: /admin/.*
   static_files: static/admin/admin.html
   upload: static/admin/admin.html
+  secure: always
 
 - url: /.*
   script: main.app
+  secure: always

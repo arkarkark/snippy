@@ -7,10 +7,10 @@ app = angular.module("SnippyAdminController", []).controller "AdminController", 
     @domain = config.baseUrl.split("/")[2]
   )
 
-  @addWellKnown = (location, fact) =>
+  @addWellKnown = (fact) =>
     return unless fact
     @lastAddedFact = ""
-    @busy = $http.post("/admin/api/wellknown", location: location, fact: fact)
+    @busy = $http.post("/admin/api/wellknown", fact: fact)
     @busy.then((data) =>
       @lastAddedFact = fact
     ).catch((data) ->

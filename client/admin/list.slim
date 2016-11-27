@@ -18,28 +18,26 @@ ul ng-show="currentUser.can"
     a< target="_self" href="/admin/suggestxml" here
     | )
   li ng-show="currentUser.can.editWellKnown"
-    a href="" ng-click="showAddWellKnownThings = true"
+    a ng-hide="showAddWellKnownThings" href="" ng-click="showAddWellKnownThings = true"
       | Add Well Known things for letsencrypt
     div ng-show="showAddWellKnownThings"
 
-      .form-group
-        input.form-control<> [
-          placeholder="Location"
-          size=60
-          ng-model="wellKnownLocation"
-        ]
-      .form-group
-        input.form-control<> [
-          placeholder="Value"
-          size=60
-          ng-model="wellKnownFact"
-        ]
-      .form-group
-          button.btn.btn-primary<> ng-click="adminController.addWellKnown(wellKnownLocation, wellKnownFact)" Add
+      .form-inline
+        .form-group
+          input.form-control<> [
+            placeholder="Add Well Known things for letsencrypt"
+            size=60
+            ng-model="wellKnownFact"
+          ]
+          button.btn.btn-primary<> ng-click="adminController.addWellKnown(wellKnownFact)" Add
+          button.btn.btn-default<> [
+            ng-show="wellKnownFact"
+            ng-click="wellKnownFact = ''"
+          ] Clear
           button.btn.btn-info<> ng-click="adminController.showFactsHelp = !adminController.showFactsHelp" Help
           button.btn.btn-default<> [
             ng-show="wellKnownFact && wellKnownFact == adminController.lastAddedFact"
-            ng-click="adminController.testWellKnown(wellKnownLocation, wellKnownFact)"
+            ng-click="adminController.testWellKnown(wellKnownFact)"
           ] Test
       div ng-show="adminController.showFactsHelp"
         .row
@@ -50,15 +48,20 @@ ul ng-show="currentUser.can"
               | See
               a<> target="_blank" href="https://github.com/letsencrypt/letsencrypt/issues/1480"
                 | letsencrypt/letsencrypt#1480
-        .row
-          .col-sm-12
-            pre
-              | openssl req -newkey rsa:2048 -keyout {{adminController.domain}}.private.key -nodes -sha512 -subj \
-                "/CN=example.com" -reqexts SAN -out {{adminController.domain}}.csr.der -outform der -config \
-                <(cat /System/Library/OpenSSL/openssl.cnf \
-                <(printf "[SAN]\nsubjectAltName=DNS:{{adminController.domain}},DNS:www.{{adminController.domain}}"))
+              | and
+              a<> target="_blank" href="https://github.com/diafygi/letsencrypt-nosudo"
+                | letsencrypt-nosudo
 
         .row
           .col-sm-12
             pre
-              | ./letsencrypt-auto certonly -a manual --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview --csr {{adminController.domain}}.csr.der
+              | openssl genrsa 2048 > user.key
+                openssl rsa -in user.key -pubout > user.pub
+                openssl genrsa 2048 > wtwf.key
+                openssl req -new -sha256 -key wtwf.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:wtwf.com,DNS:www.wtwf.com,DNS:app.wtwf.com"))  > wtwf.csr
+                # that might be /System/Library/OpenSSL/openssl.cnf
+
+        .row
+          .col-sm-12
+            pre
+              | python letsencrypt-nosudo/sign_csr.py --public-key user.pub wtwf.csr > wtwf.signed.crt

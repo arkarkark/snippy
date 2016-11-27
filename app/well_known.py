@@ -34,10 +34,9 @@ class WellKnownAdminHandler(webapp.RequestHandler):
       self.error(403)
       return
     req = json.loads(self.request.body)
-    logging.info("yay %r", req['fact'])
-    location = req['location']
     fact = req['fact']
-    well_known = WellKnown(url=location, fact=fact).put()
+    logging.info("Adding Well Known Fact: %r", fact)
+    well_known = WellKnown(url=fact.split(".")[0], fact=fact).put()
 
     self.response.headers['Content-Type'] = 'text/json'
     self.response.out.write(json.dumps({"status": "success"}))
