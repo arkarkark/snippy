@@ -1,4 +1,4 @@
-app = angular.module("SnippyAdminController", []).controller("AdminController", (
+app = angular.module("SnippyAdminController", []).controller "AdminController", (
   $http
   $window
   SnippyConfig
@@ -7,18 +7,20 @@ app = angular.module("SnippyAdminController", []).controller("AdminController", 
     @domain = config.baseUrl.split("/")[2]
   )
 
-  @addWellKnown = (fact) =>
+  @addWellKnown = (location, fact) =>
     return unless fact
     @lastAddedFact = ""
-    @busy = $http.post("/admin/api/wellknown", fact: fact)
+    @busy = $http.post("/admin/api/wellknown", location: location, fact: fact)
     @busy.then((data) =>
-        @lastAddedFact = fact
-      ).catch((data) ->
-        alert("That didn't work!", data)
-        console.error("error:", data)
-      )
+      @lastAddedFact = fact
+    ).catch((data) ->
+      alert("That didn't work!", data)
+      console.error("error:", data)
+    ).finally ->
+      @busyMessage = ""
+      @message = "done saving fact"
+
     @busyMessage = "Saving Fact"
-    @message = "done saving fact"
 
   @testWellKnown = (fact) ->
     url = fact.split(".")[0]
@@ -32,4 +34,3 @@ app = angular.module("SnippyAdminController", []).controller("AdminController", 
 
 
   @
-)

@@ -35,11 +35,9 @@ class WellKnownAdminHandler(webapp.RequestHandler):
       return
     req = json.loads(self.request.body)
     logging.info("yay %r", req['fact'])
+    location = req['location']
     fact = req['fact']
-    well_known = WellKnown(
-      url=fact.split(".")[0],
-      fact=fact
-    ).put()
+    well_known = WellKnown(url=location, fact=fact).put()
 
     self.response.headers['Content-Type'] = 'text/json'
     self.response.out.write(json.dumps({"status": "success"}))

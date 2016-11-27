@@ -38,7 +38,7 @@ nodeJavaScript = [
   "bootstrap/dist/js/bootstrap.js"
   "angular/angular.js"
   "angular-resource/angular-resource.js"
-  "ui-router/release/angular-ui-router.js"
+  "angular-ui-router/release/angular-ui-router.js"
   "qrcode-generator/js/qrcode.js"
   "angular-qrcode/angular-qrcode.js"
   "angular-ui-grid/ui-grid.js"
@@ -121,16 +121,13 @@ gulp.task "brand", ->
     .pipe(gcson())
     .pipe(gulp.dest("./app/brand"))
 
-gulp.task "appyaml", ["brand"], ->
-  run("./app/make_app.yaml.py").exec()
-
-gulp.task "build", ["coffee", "slim", "node:js", "css", "icons", "brand", "appyaml"]
+gulp.task "build", ["coffee", "slim", "node:js", "css", "icons", "brand"]
 
 gulp.task "watch", ->
   gulp.watch "client/**/*.coffee", ["coffee"]
   gulp.watch "client/**/*.slim", ["slim"]
   gulp.watch "client/**/*.scss", ["css"]
-  gulp.watch brandingDir + "/**/*", ["brand", "appyaml"]
+  gulp.watch brandingDir + "/**/*", ["brand"]
 
 gulp.task "dev", ["build", "watch"]
 

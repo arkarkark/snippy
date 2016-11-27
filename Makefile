@@ -1,5 +1,8 @@
 dev:
-	./node_modules/.bin/gulp & (cd app; dev_appserver.py --host=0.0.0.0 --port 6723 .)
+	./node_modules/.bin/gulp & (cd app; dev_appserver.py --host=0.0.0.0 \
+	  --port 6723 \
+	  --admin_port 6724 \
+	.)
 
 setup:
 	npm install
@@ -12,8 +15,9 @@ setup:
 	if [ ! -d vendor/bouncer ]; then (git -C vendor clone git@github.com:bouncer-app/bouncer.git); fi
 	(cd app; ln -s -f ../vendor/bouncer/bouncer bouncer)
 
-install:
-	./node_modules/.bin/gulp build & (cd app; appcfg.py update .)
+deploy: setup
+	./node_modules/.bin/gulp build
+	(cd app; gcloud --quiet app --project wtwfappy deploy --version=10)
 
 test:
 	for fil in app/*_test.py; do $$fil; done

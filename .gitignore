@@ -1,7 +1,6 @@
 *.pyc
 .sass-cache
 Gulpfile.js
-app/app.yaml
 app/bouncer
 app/brand
 app/dateutil
