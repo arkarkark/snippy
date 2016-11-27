@@ -57,11 +57,15 @@ ul ng-show="currentUser.can"
             pre
               | openssl genrsa 2048 > user.key
                 openssl rsa -in user.key -pubout > user.pub
-                openssl genrsa 2048 > wtwf.key
-                openssl req -new -sha256 -key wtwf.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:wtwf.com,DNS:www.wtwf.com,DNS:app.wtwf.com"))  > wtwf.csr
+                openssl genrsa 2048 > {{adminController.domain}}.key
+                openssl req -new -sha256 -key {{adminController.domain}}.key -subj "/" -reqexts SAN \
+                  -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:{{adminController.domain}},DNS:www.{{adminController.domain}},DNS:app.{{adminController.domain}}"))\
+                  > {{adminController.domain}}.csr
                 # that might be /System/Library/OpenSSL/openssl.cnf
 
         .row
           .col-sm-12
             pre
-              | python letsencrypt-nosudo/sign_csr.py --public-key user.pub wtwf.csr > wtwf.signed.crt
+              | python letsencrypt-nosudo/sign_csr.py --file-based \
+                  --email letsencrypt@mail.{{adminController.domain}} \
+                  --public-key user.pub {{adminController.domain}}.csr > {{adminController.domain}}.signed.crt
