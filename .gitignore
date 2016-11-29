@@ -8,3 +8,4 @@ app/static
 branding
 node_modules
 vendor
+app/well_known.py

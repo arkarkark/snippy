@@ -1,6 +1,4 @@
 shortName: 'snippy'
 description: 'snippy'
-baseUrl: 'http://wtwf.com/'
+baseUrl: 'https://wtwf.com/'
 developer: 'ark'
-application: 'wtwfappy'
-version: 9

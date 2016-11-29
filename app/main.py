@@ -17,7 +17,6 @@ import redirectproxy
 import snippy_config_handler
 import suggest
 import user
-import well_known
 from lib.crud import crud_handler
 
 app = webapp.WSGIApplication([
@@ -28,8 +27,6 @@ app = webapp.WSGIApplication([
   ('/admin/add/(.*)', add.AddHandler),
   ('/admin/suggestxml', suggest.SuggestXmlHandler),
   ('/admin/suggest.*', suggest.SuggestHandler),
-  ('/admin/api/wellknown.*', well_known.WellKnownAdminHandler),
-  ('/.well-known/acme-challenge/(.*)', well_known.WellKnownPublicHandler),
   ('/r/(.*)', redirectproxy.RedirectProxyHandler),
   ('/((.|\n)*)', lookup.SnippyHandler),
 ])

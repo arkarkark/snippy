@@ -14,6 +14,13 @@ setup:
 	(cd app; ln -s -f ../vendor/python-dateutil-1.5/dateutil dateutil)
 	if [ ! -d vendor/bouncer ]; then (git -C vendor clone git@github.com:bouncer-app/bouncer.git); fi
 	(cd app; ln -s -f ../vendor/bouncer/bouncer bouncer)
+	if [ ! -e app/well_known.py ]; then \
+	  if [ ! -e vendor/letsencrypt-nosudo ]; then \
+	    git -C vendor clone git@github.com:arkarkark/letsencrypt-nosudo.git; \
+	  fi; \
+	  (cd app; ln -s -f ../vendor/letsencrypt-nosudo/contrib/appengine/well_known.py); \
+	fi
+
 
 deploy: setup
 	./node_modules/.bin/gulp build

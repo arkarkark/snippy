@@ -48,6 +48,9 @@ handlers:
   upload: static/admin/admin.html
   secure: always
 
+- url: /.well-known/acme-challenge/.*
+  script: well_known.app
+
 - url: /.*
   script: main.app
   secure: always
