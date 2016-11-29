@@ -69,10 +69,10 @@ echo "Now go to http://${DOMAIN}/.well-known/acme-challenge/ and save that in ac
 
 ```
 DOMAIN=example.com
-python letsencrypt-nosudo/sign_csr.py \
-  --email letsencrypt@mail.example.com \
+python vendor/letsencrypt-nosudo/sign_csr.py \
+  --email letsencrypt@mail.${DOMAIN} \
 	--run-commands \
-	--password-file="acme-password.txt" \
+	--password-file acme-password.txt \
 	--url-based \
   --public-key user.pub ${DOMAIN}.csr > ${DOMAIN}.signed.crt
 
@@ -86,4 +86,3 @@ You'll need [MY letsencrypt-nosudo](https://github.com/arkarkark/letsencrypt-nos
 * [letsencrypt/letsencrypt#1480](https://github.com/letsencrypt/letsencrypt/issues/1480)
 * [letsencrypt-nosudo](https://github.com/diafygi/letsencrypt-nosudo)
 * [MY letsencrypt-nosudo](https://github.com/arkarkark/letsencrypt-nosudo)
-* [well_known.py Handler](blob/master/app/well_known.py)
