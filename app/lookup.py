@@ -87,4 +87,17 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
       self.redirect(str(jinja2.Template(default_url).render({'url': lookup})))
     else:
       file_name = os.path.join(os.path.dirname(__file__), 'brand/default.html')
-      self.response.out.write(open(file_name).read())
+      file_contents = open(file_name).read()
+      SEARCH = '<!--search-->'
+      if users.is_current_user_admin():
+        file_contents = file_contents.replace(
+          SEARCH,
+          '<link title="snippy" rel="search" type="application/opensearchdescription+xml" href="/admin/suggestxml">'
+        )
+      else:
+        file_contents = file_contents.replace(
+          SEARCH,
+          '<!-- not admin -->'
+        )
+
+      self.response.out.write(file_contents)

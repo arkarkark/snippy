@@ -12,8 +12,12 @@ ul ng-show="currentUser.can"
   li ng-show="currentUser.can.editSnips"
     a href="/admin/import/" Import a JSON file of snips
   li
-    a> href="javascript:window.external.AddSearchProvider(window.location.href.split('/').splice(0,3).join('/') + '/admin/suggestxml');"
-      | Add Snippy Search to your browser
-    | (xml
-    a< target="_self" href="/admin/suggestxml" here
-    | )
+    | If you have
+    code &lt;!--search--&gt;
+    | in your default template then this line will be inserted there to add a default search engine.
+    br
+    code
+      | &lt;link title="snippy" rel="search" type="application/opensearchdescription+xml" href="
+      a target="_self" href="/admin/suggestxml"
+        | /admin/suggestxml
+      | "&gt;
