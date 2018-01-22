@@ -5,7 +5,7 @@ dev:
 	.)
 
 setup:
-	npm install
+	yarn
 	mkdir -p vendor
 	if [ ! -d vendor/python-dateutil-1.5 ]; then \
 	  curl -o - http://labix.org/download/python-dateutil/python-dateutil-1.5.tar.gz | \

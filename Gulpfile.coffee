@@ -6,7 +6,7 @@ fs = require "fs"
 gcson = require "gulp-cson"
 glob = require "glob"
 gulp = require "gulp"
-gutil = require "gulp-util"
+Vinyl = require "vinyl"
 ignore = require "gulp-ignore"
 ngAnnotate = require "gulp-ng-annotate"
 rename = require "gulp-rename"
@@ -60,7 +60,7 @@ swallowError = (err) ->
 srcFromString = (filename, string) ->
   src = require("stream").Readable(objectMode: true)
   src._read = ->
-    this.push(new gutil.File(cwd: "", base: "", path: filename, contents: new Buffer(string)))
+    this.push(new Vinyl(cwd: ".", base: ".", path: filename, contents: new Buffer(string)))
     this.push(null)
   src
 
