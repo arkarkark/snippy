@@ -26,6 +26,7 @@ class Snippy(crud_model.CrudNdbModel):
   proxy = ndb.BooleanProperty()
   promoted = ndb.BooleanProperty()
   used_count = ndb.IntegerProperty()
+  created_date = ndb.DateTimeProperty(auto_now_add=True)
 
   def _pre_put_hook(self):
     memcache.delete(MISSING + self.keyword)
