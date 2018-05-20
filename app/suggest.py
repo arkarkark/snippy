@@ -39,6 +39,7 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
         elif '{searchTerms}' in url:
           url = snippy.suggest_url.replace('{searchTerms}', urllib.quote(parts[1]))
         res = google.appengine.api.urlfetch.fetch(url)
+        logging.info("REPLY\n%r", res.content)
         reply = fixupSuggestReply(url, parts, res.content)
         self.response.headers['Content-Type'] = 'application/x-suggestions+json'
         self.response.out.write(reply)
@@ -72,7 +73,7 @@ def fixupImdb(keyword, reply_key, reply):
   obj = [reply_key,
     ['%s %s' % (keyword, x[u'l']) for x in obj],
     [x[u'l'] for x in obj],
-    ['http://imdb.com/%s/%s' % (prefixes[x[u'id'][0:2]], x[u'id']) for x in obj],
+    ['https://imdb.com/%s/%s' % (prefixes[x[u'id'][0:2]], x[u'id']) for x in obj],
   ]
   return json.dumps(obj)
 
@@ -80,7 +81,7 @@ def fixupImdb(keyword, reply_key, reply):
 JSONP_START_RE = re.compile(r'^[a-zA-Z0-9_.]+\(', re.MULTILINE)
 FIXUP_MAP = {
   r'^https://www\.google\.com/s\?tbm=': fixupGoogles,
-  r'^http://sg\.media-imdb\.com/suggests': fixupImdb,
+  r'^https://sg\.media-imdb\.com/suggests': fixupImdb,
 }
 
 def getJson(s):
