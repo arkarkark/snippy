@@ -1,11 +1,11 @@
 # Copyright 2013 Google Inc. All Rights Reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -154,12 +154,17 @@ def UpdateEntityFromJsonDict(entity, json_dict):
           if value:
             if (isinstance(value, collections.Iterable) and
                 not isinstance(value, basestring)):
-              value = map(dateutil.parser.parse, value)
+              value = map(_DateParse, value)
             else:
-              value = dateutil.parser.parse(value)
+              value = _DateParse(value)
 
         setattr(entity, key, value)
 
+
+def _DateParse(v):
+  x = dateutil.parser.parse(v)
+  x = x.replace(tzinfo=None)
+  return x
 
 # following code adapted from: http://stackoverflow.com/questions/1440958/
 def _GetEntityPropertyType(entity, pname):

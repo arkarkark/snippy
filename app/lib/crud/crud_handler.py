@@ -291,7 +291,7 @@ class CrudHandler(webapp2.RequestHandler):
         ans['id'] = crud_model.NEW_ENTITY_ID
     if 'Content-Type' not in self.response.headers:
       self.response.headers['Content-Type'] = 'text/json'
-    self.response.out.write(JSON_PREFIX + json.dumps(ans, default=JsonPrinter))
+    self.response.out.write(JSON_PREFIX + json.dumps(ans, default=JsonPrinter, indent=2, sort_keys=True))
 
   def post(self):
     """Handle post requests to update an entity.
