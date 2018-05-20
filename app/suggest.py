@@ -2,6 +2,7 @@
 
 # useful?
 # http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions/1.0
+# http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions/1.1
 # https://developer.mozilla.org/en-US/docs/Supporting_search_suggestions_in_search_plugins
 __author__ = 'wtwf.com (Alex K)'
 
@@ -39,20 +40,24 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
         elif '{searchTerms}' in url:
           url = snippy.suggest_url.replace('{searchTerms}', urllib.quote(parts[1]))
         res = google.appengine.api.urlfetch.fetch(url)
-        logging.info("REPLY\n%r", res.content)
         reply = fixupSuggestReply(url, parts, res.content)
         self.response.headers['Content-Type'] = 'application/x-suggestions+json'
+        logging.debug("REPLY\n%r", reply)
         self.response.out.write(reply)
 
 
 class SuggestXmlHandler(wtwfhandler.WtwfHandler):
   def get(self):
+    if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+      DEV = ''
+    else:
+      DEV = '-dev'
     config = snippy_config.SnippyConfig()
     template_values = {
       'host': self.GetBaseUrl(),
-      'shortName': config.get('shortName', 'shortName'),
-      'description': config.get('description', 'description'),
-      'developer': config.get('developer', 'developer'),
+      'shortName': config.get('shortName', 'shortName') + DEV,
+      'description': config.get('description', 'description') + DEV,
+      'developer': config.get('developer', 'developer') + DEV,
     }
     self.response.headers['Content-Type'] = 'application/opensearchdescription+xml'
     self.SendTemplate('opensearch.xml', template_values)
@@ -70,7 +75,8 @@ def fixupImdb(keyword, reply_key, reply):
   prefixes = collections.defaultdict(lambda: 'title')
   prefixes.update({'tt': 'title', 'nm': 'name'})
   # I wish chrome understood the last 3 elements of this array.
-  obj = [reply_key,
+  obj = [
+    reply_key,
     ['%s %s' % (keyword, x[u'l']) for x in obj],
     [x[u'l'] for x in obj],
     ['https://imdb.com/%s/%s' % (prefixes[x[u'id'][0:2]], x[u'id']) for x in obj],
