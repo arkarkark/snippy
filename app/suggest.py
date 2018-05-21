@@ -115,12 +115,22 @@ def fixupGoodreads(keyword, reply_key, reply):
   ]
   return json.dumps(obj)
 
+def FixupWunderground(keyword, reply_key, reply):
+  obj = getJson(reply)
+  obj = [
+    reply_key,
+    ['%s %s' % (keyword, x[u'name']) for x in obj],
+    [x[u'name'] for x in obj],
+  ]
+  return json.dumps(obj)
+
 
 JSONP_START_RE = re.compile(r'^[a-zA-Z0-9_.]+\(', re.MULTILINE)
 FIXUP_MAP = {
   r'^https://www\.google\.com/s\?tbm=': fixupGoogles,
   r'^https://sg\.media-imdb\.com/suggests': fixupImdb,
   r'^https://www.goodreads.com': fixupGoodreads,
+  r'^https://autocomplete.wunderground.com': FixupWunderground,
 }
 
 def getJson(s):
