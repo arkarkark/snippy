@@ -124,6 +124,15 @@ def FixupWunderground(keyword, reply_key, reply):
   ]
   return json.dumps(obj)
 
+def FixupBackcountry(keyword, reply_key, reply):
+  obj = json.loads(reply)
+  obj = obj[u'suggestions'][u'queries']
+  obj = [
+    reply_key,
+    ['%s %s' % (keyword, x[u'userQuery']) for x in obj],
+    [x[u'userQuery'] for x in obj],
+  ]
+  return json.dumps(obj)
 
 JSONP_START_RE = re.compile(r'^[a-zA-Z0-9_.]+\(', re.MULTILINE)
 FIXUP_MAP = {
@@ -131,6 +140,7 @@ FIXUP_MAP = {
   r'^https://sg\.media-imdb\.com/suggests': fixupImdb,
   r'^https://www.goodreads.com': fixupGoodreads,
   r'^https://autocomplete.wunderground.com': FixupWunderground,
+  r'^http://api.backcountry.com/v1/suggestions': FixupBackcountry,
 }
 
 def getJson(s):
