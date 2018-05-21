@@ -60,10 +60,11 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
           }))
         elif '{searchTerms}' in url:
           url = snippy.suggest_url.replace('{searchTerms}', urllib.quote(parts[1]))
+        # logging.info('loading: %r', url)
         res = google.appengine.api.urlfetch.fetch(url)
         reply = fixupSuggestReply(url, parts, res.content)
         self.response.headers['Content-Type'] = 'application/x-suggestions+json'
-        logging.info("REPLY\n%s", json.dumps(json.loads(reply), indent=2, sort_keys=True))
+        # logging.info("REPLY\n%s", json.dumps(json.loads(reply), indent=2, sort_keys=True))
         self.response.out.write(reply)
 
 
@@ -85,14 +86,14 @@ class SuggestXmlHandler(wtwfhandler.WtwfHandler):
 
 def fixupGoogles(keyword, reply_key, reply):
   """the google.com/s format."""
-  obj = json.loads(getJson(reply))
+  obj = getJson(reply)
   # the first element of arrays that are 4 deep
   choices = flatten(firstNdeep(obj, 4))
   choices = ['%s %s' % (keyword, x) for x in choices if isinstance(x, (str, unicode)) and x[-1] != '=']
   return json.dumps([reply_key, choices])
 
 def fixupImdb(keyword, reply_key, reply):
-  obj = json.loads(getJson(reply))
+  obj = getJson(reply)
   prefixes = collections.defaultdict(lambda: 'title')
   prefixes.update({'tt': 'title', 'nm': 'name'})
   # I wish chrome understood the last 3 elements of this array.
@@ -104,11 +105,22 @@ def fixupImdb(keyword, reply_key, reply):
   ]
   return json.dumps(obj)
 
+def fixupGoodreads(keyword, reply_key, reply):
+  obj = getJson(reply)
+  obj = [
+    reply_key,
+    ['%s %s' % (keyword, x[u'title']) for x in obj],
+    [x[u'title'] for x in obj],
+    ['https://www.goodreads.com%s' % x[u'bookUrl'] for x in obj],
+  ]
+  return json.dumps(obj)
+
 
 JSONP_START_RE = re.compile(r'^[a-zA-Z0-9_.]+\(', re.MULTILINE)
 FIXUP_MAP = {
   r'^https://www\.google\.com/s\?tbm=': fixupGoogles,
   r'^https://sg\.media-imdb\.com/suggests': fixupImdb,
+  r'^https://www.goodreads.com': fixupGoodreads,
 }
 
 def getJson(s):
@@ -116,10 +128,9 @@ def getJson(s):
     s = s[s.find('['):s.rfind(']') + 1]
     if s.find('[\\"') != -1:
       s = s.decode('string_escape') # google.com/s does this. Sends back a json string as a key to a dict.
-    return s
   except e:
     pass
-  return s
+  return json.loads(s)
 
 def fixupSuggestReply(url, parts, reply):
   """Takes a suggest url reply and add the keyword to every suggestion."""
@@ -132,10 +143,7 @@ def fixupSuggestReply(url, parts, reply):
       return func(keyword, reply_key, reply)
 
   # make sure it's not jsonp
-  reply = getJson(reply)
-
-  # first decode it
-  obj = json.loads(reply)
+  obj = getJson(reply)
 
   if len(obj) >= 2 and isinstance(obj[1], list):
     # result is ['searchTerm', ['option1', 'option2']]
