@@ -4,11 +4,32 @@
 # http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions/1.0
 # http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions/1.1
 # https://developer.mozilla.org/en-US/docs/Supporting_search_suggestions_in_search_plugins
+"""
+suggets reply is
+```
+[
+  "imdb star wa",
+  [
+    "imdb Star Wars on IMDb",
+    "imdb Solo: A Star Wars Story",
+  ],
+  [
+    "Star Wars on IMDb",
+    "Solo: A Star Wars Story",
+  ],
+  [
+    "https://imdb.com/title//star-wars",
+    "https://imdb.com/title/tt3778644",
+  ]
+]
+```
+"""
 __author__ = 'wtwf.com (Alex K)'
 
 import collections
 import json
 import logging
+import os
 import re
 import urllib
 
@@ -42,7 +63,7 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
         res = google.appengine.api.urlfetch.fetch(url)
         reply = fixupSuggestReply(url, parts, res.content)
         self.response.headers['Content-Type'] = 'application/x-suggestions+json'
-        logging.debug("REPLY\n%r", reply)
+        logging.info("REPLY\n%s", json.dumps(json.loads(reply), indent=2, sort_keys=True))
         self.response.out.write(reply)
 
 
