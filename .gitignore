@@ -4,8 +4,12 @@ Gulpfile.js
 app/bouncer
 app/brand
 app/dateutil
+app/decorator.py
+app/jsonpath_rw
+app/ply
+app/six.py
 app/static
+app/well_known.py
 branding
 node_modules
 vendor
-app/well_known.py

@@ -33,6 +33,8 @@ import os
 import re
 import urllib
 
+import jsonpath_rw
+
 import google.appengine.api.urlfetch
 
 import jinja2
@@ -97,40 +99,44 @@ def fixupImdb(keyword, reply_key, reply):
   prefixes = collections.defaultdict(lambda: 'title')
   prefixes.update({'tt': 'title', 'nm': 'name'})
   # I wish chrome understood the last 3 elements of this array.
+  # jsonpath_expr = jsonpath_rw.parse('d[*].l') # do this when we do getJson better
+  jsonpath_expr = jsonpath_rw.parse('[*].l')
   obj = [
     reply_key,
-    ['%s %s' % (keyword, x[u'l']) for x in obj],
-    [x[u'l'] for x in obj],
-    ['https://imdb.com/%s/%s' % (prefixes[x[u'id'][0:2]], x[u'id']) for x in obj],
+    ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
+    # [x[u'l'] for x in obj],
+    # ['https://imdb.com/%s/%s' % (prefixes[x[u'id'][0:2]], x[u'id']) for x in obj],
   ]
   return json.dumps(obj)
 
 def fixupGoodreads(keyword, reply_key, reply):
   obj = getJson(reply)
+  jsonpath_expr = jsonpath_rw.parse('[*].title')
   obj = [
     reply_key,
-    ['%s %s' % (keyword, x[u'title']) for x in obj],
-    [x[u'title'] for x in obj],
-    ['https://www.goodreads.com%s' % x[u'bookUrl'] for x in obj],
+    ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
+    # [x[u'title'] for x in obj],
+    # ['https://www.goodreads.com%s' % x[u'bookUrl'] for x in obj],
   ]
   return json.dumps(obj)
 
 def FixupWunderground(keyword, reply_key, reply):
   obj = getJson(reply)
+  jsonpath_expr = jsonpath_rw.parse('[*].name')
   obj = [
     reply_key,
-    ['%s %s' % (keyword, x[u'name']) for x in obj],
-    [x[u'name'] for x in obj],
+    ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
+    # [x[u'name'] for x in obj],
   ]
   return json.dumps(obj)
 
 def FixupBackcountry(keyword, reply_key, reply):
   obj = json.loads(reply)
-  obj = obj[u'suggestions'][u'queries']
+  jsonpath_expr = jsonpath_rw.parse('suggestions.queries[*].userQuery')
   obj = [
     reply_key,
-    ['%s %s' % (keyword, x[u'userQuery']) for x in obj],
-    [x[u'userQuery'] for x in obj],
+    ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
+    # [x[u'userQuery'] for x in obj],
   ]
   return json.dumps(obj)
 
@@ -151,6 +157,14 @@ def getJson(s):
   except e:
     pass
   return json.loads(s)
+
+# ^^^ getJson is too agressive... use this soon...
+def getJsonFromJsonP(s):
+  json_pattern = re.compile(r"""^[^\(:;'"]*\((.*)\)""", re.MULTILINE)
+  match = json_pattern.match(s)
+  if match:
+    return match.group(1)
+  return s
 
 def fixupSuggestReply(url, parts, reply):
   """Takes a suggest url reply and add the keyword to every suggestion."""
