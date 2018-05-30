@@ -14,6 +14,7 @@ angular.module("SnippyEdit", []).controller("EditController", (
   @snip = Snip.query({keyword: @originalKeyword}, (snips) =>
     @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: ""})
     @original = angular.copy(@snip)
+    @snipUrl = @getUrl()
     newUrl = $location.search().url
     if newUrl && @original.url
       @snip.url = newUrl
@@ -25,9 +26,17 @@ angular.module("SnippyEdit", []).controller("EditController", (
 
   @keywordChanged = =>
     $location.search("keyword", @snip.keyword)
+    @snipUrl = @getUrl()
+
+  @snipChanged = =>
+    newKeyword = @snipUrl[@getBaseUrl().length...]
+    if newKeyword && newKeyword != @snip?.keyword
+      @snip.keyword = newKeyword
+      @keywordChanged()
+    @snipUrl = @getUrl()
 
   @getBaseUrl = =>
-    @config.baseUrl || "#{$location.absUrl().split("/").splice(0,3).join("/")}/"
+    @config.baseUrl || "#{$location.absUrl().split("/").splice(0, 3).join("/")}/"
 
   @getUrl = =>
     if @snip?.keyword then @getBaseUrl() + @snip?.keyword else ""

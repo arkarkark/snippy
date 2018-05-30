@@ -17,12 +17,13 @@ form.form-horizontal [
         ark-focus="!editController.snip.id"
       ]
     .col-sm-6
-      input.form-control#keyword [
+      input.form-control#snip [
         ark-select-all
         onkeydown="return (event.keyCode!=13);"
         ark-focus="editController.snip.id"
         ark-key-broadcast="{'mod-return': 'arkOpenUrl', 'return': 'arkOpenUrl'}"
-        value="{{editController.getUrl()}}"
+        ng-model="editController.snipUrl"
+        ng-change="editController.snipChanged()"
       ]
 
   .form-group
@@ -56,6 +57,11 @@ form.form-horizontal [
     label.col-sm-2.control-label for="suggest" Suggest Url
     .col-sm-10
       input.form-control#suggest ng-model="editController.snip.suggest_url"
+
+  .form-group ng-show="editController.snip.suggest_url"
+    label.col-sm-2.control-label for="suggest" Suggest JSONpath
+    .col-sm-10
+      input.form-control#suggest ng-model="editController.snip.suggest_jsonpath"
 
   .form-group
     label.col-sm-2.control-label for="private" Private

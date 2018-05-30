@@ -22,6 +22,7 @@ class Snippy(crud_model.CrudNdbModel):
   alt_url = ndb.TextProperty()  # used when url has %s and no second param given
   mobile_url = ndb.TextProperty()  # used when requested form a mobile device
   suggest_url = ndb.TextProperty()  # used for suggest as you type
+  suggest_jsonpath = ndb.TextProperty()  # used for suggest as you type
   private = ndb.BooleanProperty()
   proxy = ndb.BooleanProperty()
   promoted = ndb.BooleanProperty()

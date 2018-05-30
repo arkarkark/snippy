@@ -26,7 +26,6 @@ suggets reply is
 """
 __author__ = 'wtwf.com (Alex K)'
 
-import collections
 import json
 import logging
 import os
@@ -64,7 +63,7 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
           url = snippy.suggest_url.replace('{searchTerms}', urllib.quote(parts[1]))
         # logging.info('loading: %r', url)
         res = google.appengine.api.urlfetch.fetch(url)
-        reply = fixupSuggestReply(url, parts, res.content)
+        reply = fixupSuggestReply(url, parts, res.content, snippy.suggest_jsonpath)
         self.response.headers['Content-Type'] = 'application/x-suggestions+json'
         # logging.info("REPLY\n%s", json.dumps(json.loads(reply), indent=2, sort_keys=True))
         self.response.out.write(reply)
@@ -73,15 +72,15 @@ class SuggestHandler(wtwfhandler.WtwfHandler):
 class SuggestXmlHandler(wtwfhandler.WtwfHandler):
   def get(self):
     if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
-      DEV = ''
+      dev = ''
     else:
-      DEV = '-dev'
+      dev = '-dev'
     config = snippy_config.SnippyConfig()
     template_values = {
       'host': self.GetBaseUrl(),
-      'shortName': config.get('shortName', 'shortName') + DEV,
-      'description': config.get('description', 'description') + DEV,
-      'developer': config.get('developer', 'developer') + DEV,
+      'shortName': config.get('shortName', 'shortName') + dev,
+      'description': config.get('description', 'description') + dev,
+      'developer': config.get('developer', 'developer') + dev,
     }
     self.response.headers['Content-Type'] = 'application/opensearchdescription+xml'
     self.SendTemplate('opensearch.xml', template_values)
@@ -94,59 +93,18 @@ def fixupGoogles(keyword, reply_key, reply):
   choices = ['%s %s' % (keyword, x) for x in choices if isinstance(x, (str, unicode)) and x[-1] != '=']
   return json.dumps([reply_key, choices])
 
-def fixupImdb(keyword, reply_key, reply):
-  obj = getJson(reply)
-  prefixes = collections.defaultdict(lambda: 'title')
-  prefixes.update({'tt': 'title', 'nm': 'name'})
-  # I wish chrome understood the last 3 elements of this array.
-  # jsonpath_expr = jsonpath_rw.parse('d[*].l') # do this when we do getJson better
-  jsonpath_expr = jsonpath_rw.parse('[*].l')
+def FixupJsonPath(keyword, reply_key, reply, suggest_jsonpath):
+  obj = json.loads(getJsonFromJsonP(reply))
+  jsonpath_expr = jsonpath_rw.parse(suggest_jsonpath)
   obj = [
     reply_key,
     ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
-    # [x[u'l'] for x in obj],
-    # ['https://imdb.com/%s/%s' % (prefixes[x[u'id'][0:2]], x[u'id']) for x in obj],
-  ]
-  return json.dumps(obj)
-
-def fixupGoodreads(keyword, reply_key, reply):
-  obj = getJson(reply)
-  jsonpath_expr = jsonpath_rw.parse('[*].title')
-  obj = [
-    reply_key,
-    ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
-    # [x[u'title'] for x in obj],
-    # ['https://www.goodreads.com%s' % x[u'bookUrl'] for x in obj],
-  ]
-  return json.dumps(obj)
-
-def FixupWunderground(keyword, reply_key, reply):
-  obj = getJson(reply)
-  jsonpath_expr = jsonpath_rw.parse('[*].name')
-  obj = [
-    reply_key,
-    ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
-    # [x[u'name'] for x in obj],
-  ]
-  return json.dumps(obj)
-
-def FixupBackcountry(keyword, reply_key, reply):
-  obj = json.loads(reply)
-  jsonpath_expr = jsonpath_rw.parse('suggestions.queries[*].userQuery')
-  obj = [
-    reply_key,
-    ['%s %s' % (keyword, x.value) for x in jsonpath_expr.find(obj)],
-    # [x[u'userQuery'] for x in obj],
   ]
   return json.dumps(obj)
 
 JSONP_START_RE = re.compile(r'^[a-zA-Z0-9_.]+\(', re.MULTILINE)
 FIXUP_MAP = {
   r'^https://www\.google\.com/s\?tbm=': fixupGoogles,
-  r'^https://sg\.media-imdb\.com/suggests': fixupImdb,
-  r'^https://www.goodreads.com': fixupGoodreads,
-  r'^https://autocomplete.wunderground.com': FixupWunderground,
-  r'^http://api.backcountry.com/v1/suggestions': FixupBackcountry,
 }
 
 def getJson(s):
@@ -166,15 +124,17 @@ def getJsonFromJsonP(s):
     return match.group(1)
   return s
 
-def fixupSuggestReply(url, parts, reply):
+def fixupSuggestReply(url, parts, reply, suggest_jsonpath=None):
   """Takes a suggest url reply and add the keyword to every suggestion."""
   keyword = parts[0]
-  search_term = parts[1]
   reply_key = ' '.join(parts)
 
-  for (regex, func) in FIXUP_MAP.items():
-    if re.search(regex, url):
-      return func(keyword, reply_key, reply)
+  if suggest_jsonpath:
+    return FixupJsonPath(keyword, reply_key, reply, suggest_jsonpath)
+  else:
+    for (regex, func) in FIXUP_MAP.items():
+      if re.search(regex, url):
+        return func(keyword, reply_key, reply)
 
   # make sure it's not jsonp
   obj = getJson(reply)
@@ -205,8 +165,8 @@ def removeBold(entry):
 def flatten(i):
   if isinstance(i, list) or isinstance(i, tuple):
     for j in i:
-      for x in flatten(j):
-        yield x
+      for k in flatten(j):
+        yield k
   else:
     if i:
       yield i
