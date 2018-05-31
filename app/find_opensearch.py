@@ -62,25 +62,41 @@ class FindOpensearchHandler(wtwfhandler.WtwfHandler):
     content = res.content
 
     # first try and find opensearch
-    opensearch_re = re.compile(r'<[^>]*opensearchdescription\+xml[^>]*>')
-    match = opensearch_re.search(content)
-    if match:
-      parser = FindHrefParser()
-      parser.feed(match.group(0))
-      if len(parser.hrefs) > 0:
-        href = parser.hrefs[0]
-        res = google.appengine.api.urlfetch.fetch(urlparse.urljoin(base, href))
-        content = res.content
-        # xml parse that shit
-        root = xml.etree.ElementTree.fromstring(content)
-        # get the Url elements (url, URL too)
-
-        # if it's text/html it's the search url, get template, replace {searchTerms} with %s
-        # make sure it doesn't have &amp;
-
-        # if it's application/x-suggestions+json then it's the suggest url
-
-        # if it only has application/x-suggestions+xml then that's messed up
+    opensearch_url = getOpenSearchUrl(res.content)
+    if opensearch_url:
+      res = google.appengine.api.urlfetch.fetch(urlparse.urljoin(base, opensearch_url))
+      search_and_suggest = getSearchAndSuggestFromOpenSearchXml(res.content)
 
 
     # second try and find ld+json
+
+
+def getOpenSearchUrl(page):
+  opensearch_re = re.compile(r'<[^>]*opensearchdescription\+xml[^>]*>')
+  match = opensearch_re.search(page)
+  if match:
+    parser = FindHrefParser()
+    parser.feed(match.group(0))
+    if len(parser.hrefs) > 0:
+      return parser.hrefs[0]
+
+def getSearchAndSuggestFromOpenSearchXml(xml):
+  # xml parse that shit
+  root = xml.etree.ElementTree.fromstring(xml)
+  search = None
+  suggest = None
+
+  # get the Url elements (url, URL too)
+  root.find('url')
+
+  # if it's text/html it's the search url, get template, replace {searchTerms} with %s
+  # make sure it doesn't have &amp;
+
+  # if it's application/x-suggestions+json then it's the suggest url
+
+  # if it only has application/x-suggestions+xml then that's messed up
+
+
+
+  if search or suggest:
+    return {search: search, suggest: suggest}
