@@ -66,6 +66,11 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
           else:
             self.redirect(users.create_login_url(self.request.uri))
             return
+      if snippy.ip_restrict:
+        if snippy.ip_restrict != self.request.remote_addr:
+          url = None
+
+    if url:
       try:
         snippy.used_count = (snippy.used_count or 0) + 1
         snippy.put()
@@ -73,7 +78,6 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
         logging.exception('unable to +1 counter for: %s (old counter %r)',
                           snippy.keyword, snippy.used_count)
 
-    if url:
       if self.request.referrer:
         self.redirect('/r/' + urllib.quote(url.encode('utf-8')))
       else:

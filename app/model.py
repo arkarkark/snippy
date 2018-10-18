@@ -2,7 +2,6 @@
 
 __author__ = 'wtwf.com (Alex K)'
 
-import datetime
 import logging
 import random
 
@@ -23,6 +22,7 @@ class Snippy(crud_model.CrudNdbModel):
   mobile_url = ndb.TextProperty()  # used when requested form a mobile device
   suggest_url = ndb.TextProperty()  # used for suggest as you type
   suggest_jsonpath = ndb.TextProperty()  # used for suggest as you type
+  ip_restrict = ndb.TextProperty()  # limit this snip to only this ip address
   private = ndb.BooleanProperty()
   proxy = ndb.BooleanProperty()
   promoted = ndb.BooleanProperty()
@@ -72,7 +72,6 @@ def GetByKeyword(kw):
     return ans
   except:
     return None
-
 
 def NewRandomId():
   random.seed()

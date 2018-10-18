@@ -10,6 +10,12 @@ angular.module("SnippyEdit", []).controller("EditController", (
   @qrSettings = =>
     QrService.settings(@getUrl())
 
+  @addThisIp = =>
+    $.getJSON 'https://json.geoiplookup.io/?callback=?', (data) =>
+      $scope.$apply =>
+        @snip.ip_restrict = data.ip
+    return false
+
   @originalKeyword = $location.search().keyword || ""
   @snip = Snip.query({keyword: @originalKeyword}, (snips) =>
     @snip = snips?[0] || new Snip({keyword: @originalKeyword, id: ""})

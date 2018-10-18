@@ -64,6 +64,13 @@ form.form-horizontal [
       input.form-control#suggest ng-model="editController.snip.suggest_jsonpath"
 
   .form-group
+    label.col-sm-2.control-label for="ip" IP Restrict
+    .col-sm-8
+      input.form-control#ip ng-model="editController.snip.ip_restrict"
+    .col-sm-2
+      button.btn.btn-default type="button" ng-click="editController.addThisIp()" Add This IP
+
+  .form-group
     label.col-sm-2.control-label for="private" Private
     .col-sm-2
       input.form-checkbox#private type="checkbox" ng-model="editController.snip.private"
@@ -94,13 +101,13 @@ form.form-horizontal [
 
     .col-sm-6
       .right
-        button.btn<> [
+        button.btn.btn-default<> [
           type="button"
           ng-click="editController.delete(editForm)"
         ]
           | Delete
 
-        button.btn<> [
+        button.btn.btn-default<> [
           type="button"
           ark-download="editController.exportString()"
           ark-attr-file-name="{{editController.snip.keyword}}.json"
