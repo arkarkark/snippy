@@ -58,6 +58,10 @@ form.form-horizontal [
             tooltip="{{snip.private ? 'Private' : ''}}"
           ]
           i.fa.fa-globe<> [
+            ng-class="{fahide: !snip.ip_restrict}"
+            tooltip="{{snip.ip_restrict ? 'IP Restricted' : ''}}"
+          ]
+          i.fa.fa-globe<> [
             ng-class="{fahide: !snip.promoted}"
             tooltip="{{snip.promoted ? 'Promoted' : ''}}"
           ]
@@ -101,12 +105,12 @@ hr
     .col-sm-1
     .col-sm-5
       span.right
-        button.btn<> [
+        button.btn.btn-default<> [
           type="button"
           ng-disabled="searchController.buttonsEnabled()"
           ng-click="searchController.delete(resultsForm)"
         ] Delete
-        button.btn<> [
+        button.btn.btn-default<> [
           type="button"
           ng-disabled="!searchController.snips.length"
           ark-download="searchController.exportString()"
