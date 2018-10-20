@@ -1,5 +1,7 @@
 angular.module("SnippyEdit", []).controller("EditController", (
+  $http
   $location
+  $sce
   $scope
   $timeout
   $window
@@ -11,10 +13,9 @@ angular.module("SnippyEdit", []).controller("EditController", (
     QrService.settings(@getUrl())
 
   @addThisIp = =>
-    $.getJSON 'https://json.geoiplookup.io/?callback=?', (data) =>
-      $scope.$apply =>
-        @snip.ip_restrict = data.ip
-    return false
+    url = $sce.trustAsResourceUrl('https://api.ipify.org?format=jsonp')
+    $http.jsonp(url, jsonpCallbackParam: 'callback').then (response) =>
+      @snip.ip_restrict = response.data.ip
 
   @originalKeyword = $location.search().keyword || ""
   @snip = Snip.query({keyword: @originalKeyword}, (snips) =>
