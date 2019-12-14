@@ -13,7 +13,7 @@ clean:
 
 deploy: setup
 	./node_modules/.bin/gulp build
-	(cd app; gcloud --quiet app --project wtwfappy deploy --version=11)
+	(cd app; gcloud --quiet app --project wtwfappy deploy --version=13)
 
 test:
 	for fil in app/*_test.py; do $$fil; done
