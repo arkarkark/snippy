@@ -69,9 +69,23 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
                         return
             if snippy.ip_restrict:
                 try:
-                    if socket.inet_aton(snippy.ip_restrict) != self.request.remote_addr:
+                    if (
+                        socket.gethostbyname(snippy.ip_restrict)
+                        != self.request.remote_addr
+                    ):
+                        logging.info(
+                            "ip_restrict fail %r or %r  == %r",
+                            snippy.ip_restrict,
+                            socket.gethostbyname(snippy.ip_restrict),
+                            self.request.remote_addr,
+                        )
                         url = None
                 except socket.error:
+                    logging.error(
+                        "error when looking up ip_restrict %r != %r",
+                        snippy.ip_restrict,
+                        self.request.remote_addr,
+                    )
                     url = None
 
         if url:

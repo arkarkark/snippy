@@ -13,3 +13,5 @@ app/well_known.py
 branding
 node_modules
 vendor
+dist
+old.dist
