@@ -7,6 +7,7 @@ import logging
 import os
 import socket
 
+from google.appengine.api import urlfetch
 from google.appengine.api import users
 
 import jinja2
@@ -80,13 +81,24 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
                             self.request.remote_addr,
                         )
                         url = None
-                except socket.error:
+                except socket.error as err:
                     logging.error(
-                        "error when looking up ip_restrict %r != %r",
+                        "error %r when looking up ip_restrict %r != %r trying hackertarget api",
+                        err,
                         snippy.ip_restrict,
                         self.request.remote_addr,
                     )
-                    url = None
+                    # try and api
+                    url = (
+                        "https://api.hackertarget.com/dnslookup/?q=%s"
+                        % snippy.ip_restrict
+                    )
+                    result = urlfetch.fetch(parts[1], allow_truncated=True, deadline=1)
+
+                    ip = result.content.split("\n")[0].split("\t")[-1]
+
+                    if ip != self.request.remote_addr:
+                        url = None
 
         if url:
             try:
