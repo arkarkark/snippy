@@ -89,11 +89,11 @@ class SnippyHandler(wtwfhandler.WtwfHandler):
                         self.request.remote_addr,
                     )
                     # try and api
-                    url = (
+                    ip_url = (
                         "https://api.hackertarget.com/dnslookup/?q=%s"
                         % snippy.ip_restrict
                     )
-                    result = urlfetch.fetch(parts[1], allow_truncated=True, deadline=1)
+                    result = urlfetch.fetch(ip_url, allow_truncated=True, deadline=1)
 
                     ip = result.content.split("\n")[0].split("\t")[-1]
 
