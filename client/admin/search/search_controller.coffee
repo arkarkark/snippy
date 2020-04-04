@@ -1,5 +1,6 @@
 angular.module("SnippySearch").controller("SearchController", (
-  $location, $q, $scope, $window, Snip) ->
+  $location, $q, $scope, $window, Snip
+) ->
 
   @snips = []
   @snipSelected = []
@@ -36,8 +37,9 @@ angular.module("SnippySearch").controller("SearchController", (
     )
 
   @exportString = =>
+    nothingSelected = !_.some(@snipSelected, (snip) -> snip)
     selected = _.chain(@snips)
-      .filter((s, index) => @snipSelected[index])
+      .filter((s, index) => nothingSelected || @snipSelected[index])
       .map((s) -> _.omit(s, "id"))
       .value()
     JSON.stringify(selected, null, 2)
