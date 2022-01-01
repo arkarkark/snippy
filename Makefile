@@ -5,15 +5,15 @@ dev:
 	.)
 
 setup: vendor app/jsonpath_rw app/dateutil app/bouncer app/well_known.py
-	yarn
+#	yarn
 
 clean:
 	cd app; rm -f -v bouncer dateutil decorator.py jsonpath* ply six.py well_known.py
 	rm -rf vendor
 
 deploy: setup
-	./node_modules/.bin/gulp build
-	(cd app; gcloud --quiet app --project wtwfappy deploy --version=13)
+	echo ./node_modules/.bin/gulp build
+	(cd app; gcloud --quiet app --project wtwfappy deploy --version=16)
 
 test:
 	for fil in app/*_test.py; do $$fil; done
